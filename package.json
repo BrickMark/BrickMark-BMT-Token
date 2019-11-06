@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "truffle test",
+    "build": "truffle compile",
     "flat": "truffle-flattener ./contracts/BMTToken.sol > ./BMTFlat.sol",
     "lint": "solhint \"contracts/**/*.sol\"",
     "coverage": "solidity-coverage",

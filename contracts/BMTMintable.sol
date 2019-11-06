@@ -1,10 +1,10 @@
 pragma solidity ^0.5.8;
 
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol";
-import "./BMTERC20Vested.sol";
+import "./BMTVested.sol";
 
 
-contract BMTERC20Mintable is BMTERC20Vested, ERC20Mintable {
+contract BMTMintable is BMTVested, ERC20Mintable {
 
     
     constructor()

@@ -3,7 +3,7 @@ pragma solidity ^0.5.8;
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 
 
-contract BMTERC20Vested is ERC20 {
+contract BMTVested is ERC20 {
 
     uint256 private _maxVestingDuration = 365 days;
     //address is the vested tokenholder
