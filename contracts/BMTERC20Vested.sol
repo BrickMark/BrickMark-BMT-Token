@@ -1,8 +1,6 @@
 pragma solidity ^0.5.8;
 
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
-import "openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
-import "openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol";
 
 
 contract BMTERC20Vested is ERC20 {
@@ -15,17 +13,22 @@ contract BMTERC20Vested is ERC20 {
     event VestedAccount(address account, uint256 endTime);
 
     constructor()
-    public
-    {}
+    public 
+    ERC20() {}
     
     function isVested(address account) public view returns (bool) {
         return _vestedMap[account] != 0 && _vestedMap[account] < block.timestamp;
+    }
+
+    function vestingEndTime(address account) public view returns (uint256) {
+        return _vestedMap[account];
     }
 
     function _addVested(address account, uint256 endTime) internal {
         require(isVested(account) == false, "account already vested");
         require(endTime >= block.timestamp, "Vesting endtime can not be in the past");
         require(endTime < block.timestamp + _maxVestingDuration, "Vesting exceeds duration");
+        
         _vestedMap[account] = endTime;
 
         emit VestedAccount(account, endTime);

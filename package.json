@@ -17,7 +17,7 @@
     "type": "git",
     "url": "git+https://digitalizeit@bitbucket.org/digitalizeit/bmt-token.git"
   },
-  "author": "DigitalizeIT.io",
+  "author": "TBD",
   "license": "SEE LICENSE IN LICENSE",
   "homepage": "https://bitbucket.org/digitalizeit/bmt-token#readme",
   "devDependencies": {
