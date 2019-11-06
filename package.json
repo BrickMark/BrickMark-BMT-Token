@@ -7,7 +7,11 @@
     "test": "test"
   },
   "scripts": {
-    "test": "truffle test"
+    "test": "truffle test",
+    "flat": "truffle-flattener ./contracts/BMTToken.sol > ./BMTFlat.sol",
+    "lint": "solhint \"contracts/**/*.sol\"",
+    "coverage": "solidity-coverage",
+    "ganache": "ganache-cli -m \"dial bulk garage popular robot horse hand click enhance clown clay despair\""
   },
   "repository": {
     "type": "git",
@@ -17,6 +21,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "homepage": "https://bitbucket.org/digitalizeit/bmt-token#readme",
   "devDependencies": {
+    "ganache-cli": "^6.7.0",
     "solhint": "^2.3.0",
     "solidity-coverage": "^0.6.7",
     "truffle-flattener": "^1.4.2"
