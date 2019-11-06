@@ -1,0 +1,28 @@
+{
+  "name": "bmt-token",
+  "version": "1.0.0",
+  "description": "BrickMark BMT Token",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://digitalizeit@bitbucket.org/digitalizeit/bmt-token.git"
+  },
+  "author": "DigitalizeIT.io",
+  "license": "SEE LICENSE IN LICENSE",
+  "homepage": "https://bitbucket.org/digitalizeit/bmt-token#readme",
+  "devDependencies": {
+    "solhint": "^2.3.0",
+    "solidity-coverage": "^0.6.7",
+    "truffle-flattener": "^1.4.2"
+  },
+  "dependencies": {
+    "openzeppelin-solidity": "^2.4.0",
+    "truffle-hdwallet-provider": "^1.0.17"
+  }
+}
