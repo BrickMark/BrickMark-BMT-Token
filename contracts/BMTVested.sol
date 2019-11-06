@@ -10,7 +10,6 @@ contract BMTVested is ERC20 {
     //uint256 is the unixtime (epoche in seconds) the tokens are vested
     mapping (address => uint256) private _vestedMap;
 
-    event VestedAccount(address account, uint256 endTime);
 
     constructor()
     public 
@@ -30,8 +29,6 @@ contract BMTVested is ERC20 {
         require(endTime < block.timestamp + _maxVestingDuration, "Vesting exceeds duration");
         
         _vestedMap[account] = endTime;
-
-        emit VestedAccount(account, endTime);
     }
 
     function _transfer(address sender, address recipient, uint256 amount) internal {
