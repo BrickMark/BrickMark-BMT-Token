@@ -16,7 +16,7 @@ contract BMTVested is ERC20 {
     ERC20() {}
     
     function isVested(address account) public view returns (bool) {
-        return _vestedMap[account] != 0 && _vestedMap[account] < block.timestamp;
+        return _vestedMap[account] != 0 && _vestedMap[account] > block.timestamp;
     }
 
     function vestingEndTime(address account) public view returns (uint256) {

@@ -1,4 +1,4 @@
-const BMTToken = artifacts.require("BMTToken");
+const BMTToken = artifacts.require("BMTToken.sol");
 
 module.exports = function (deployer, network) {
   deployer.then(async () => {

@@ -4,6 +4,11 @@ BrickMark smart contracts.
 
 Best practice: https://consensys.github.io/smart-contract-best-practices/
 
+## Qestions to clarify
+
+- Vested: Mint can still mint to vested address. Should be allowed or not?
+- Vested: PayDividend can still mint to vested address. Should be allowed or not?
+
 ## Requirements
 
 Following tools are required:

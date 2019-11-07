@@ -23,6 +23,7 @@
   "homepage": "https://bitbucket.org/digitalizeit/bmt-token#readme",
   "devDependencies": {
     "ganache-cli": "^6.7.0",
+    "ganache-time-traveler": "^1.0.5",
     "solhint": "^2.3.0",
     "solidity-coverage": "^0.6.7",
     "truffle-flattener": "^1.4.2"

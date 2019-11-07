@@ -17,7 +17,6 @@ contract("BMTToken Minting test", async accounts => {
 
         for(var i=0; i<recipients.length; i++) {
             var balance = await instance.balanceOf.call(recipients[i]);
-            console.log("balance: " + balance);
             assert.equal(balance.toString(), amounts[i]);
         }
     });
@@ -30,17 +29,20 @@ contract("BMTToken Minting test", async accounts => {
         let now = Math.trunc(new Date().getTime() / 1000);
         console.log("time now: " + now);
         let day = 60 * 60 * 24;
-        let lockTime = [now + day, now + (2 * day), now + (3 * day)]
+        let lockTimes = [now + day, now + (2 * day), now + (3 * day)]
         
-        let result = await instance.mintBatchVested(recipients, amounts, lockTime);
+        let result = await instance.mintBatchVested(recipients, amounts, lockTimes);
         console.dir(result);
 
         for(var i=0; i<recipients.length; i++) {
             var balance = await instance.balanceOf.call(recipients[i]);
-            console.log("balance: " + balance);
             assert.equal(balance.toString(), amounts[i]);
+            
+            var isVested = await instance.isVested.call(recipients[i]);
+            assert.equal(isVested, true);
 
-            //TODO: Check the correct lock time
+            var lockTime = await instance.vestingEndTime.call(recipients[i]);
+            assert.equal(lockTime, lockTimes[i]);
         }
     });
 
