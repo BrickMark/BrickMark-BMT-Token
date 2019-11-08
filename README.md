@@ -8,6 +8,14 @@ Best practice: https://consensys.github.io/smart-contract-best-practices/
 
 - Vested: Mint can still mint to vested address. Should be allowed or not?
 - Vested: PayDividend can still mint to vested address. Should be allowed or not?
+- Vested: How long will be accounts vested?
+- Dividend: When will the first dividend be payed?
+- Paused: Should mint still be allowed
+- Freezed: Nothing allowed anymore
+- MinterRole / PauserRole: Really necessary? Or would "owner" be good enough? Separation of concern.
+
+### TODO
+- Design a state machine
 
 ## Requirements
 

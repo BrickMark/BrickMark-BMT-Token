@@ -58,4 +58,64 @@ contract("BMTToken PauseAndFreeze test", async accounts => {
             assert.equal(ex.reason, "BMTFreezable: frozen");
         }
     });
+
+    it("Pause mint should be possible", async () => {
+        let instance = await BMTToken.new({ from: BrickMark });
+        let amount = "1000000000000000000";
+
+        await instance.pause();
+        
+        await instance.mint(alice, amount);
+        await instance.mintBatch([alice], [amount]);
+        await instance.payDividend([alice], [amount], "Dividend for Alice");
+        let now = Math.trunc(new Date().getTime() / 1000);
+        await instance.mintBatchVested([alice], [amount], [now + 3600]);
+
+
+        try {
+       //     assert.fail("VM Exception expected");
+        } catch (ex) {
+            console.log(ex);
+            assert.equal(ex.reason, "Pausable: paused");
+        }
+    });
+
+    it("Freeze mint should NOT be possible", async () => {
+        let instance = await BMTToken.new({ from: BrickMark });
+        let amount = "1000000000000000000";
+
+        await instance.pause();
+        await instance.freeze();
+
+        try {
+            await instance.mint(alice, amount);
+            assert.fail("VM Exception expected");
+        } catch (ex) {
+            assert.equal(ex.reason, "BMTFreezable: frozen");
+        }
+
+        try {
+            await instance.mintBatch([alice], [amount]);
+            assert.fail("VM Exception expected");
+        } catch (ex) {
+            assert.equal(ex.reason, "BMTFreezable: frozen");
+        }
+
+        try {
+            await instance.payDividend([alice], [amount], "Dividend for Alice");
+            assert.fail("VM Exception expected");
+        } catch (ex) {
+            console.log(ex);
+            assert.equal(ex.reason, "BMTFreezable: frozen");
+        }
+
+        try {
+            let now = Math.trunc(new Date().getTime() / 1000);
+            await instance.mintBatchVested([alice], [amount], [now + 3600]);
+            assert.fail("VM Exception expected");
+        } catch (ex) {
+            console.log(ex);
+            assert.equal(ex.reason, "BMTFreezable: frozen");
+        }
+    });
 });

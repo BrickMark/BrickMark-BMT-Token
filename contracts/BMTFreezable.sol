@@ -23,7 +23,7 @@ contract BMTFreezable is ERC20Pausable {
     }
 
     // Freeze is only possible when already paused
-    function freeze() public onlyPauser whenPaused {
+    function freeze() public onlyPauser whenPaused whenNotFrozen {
         _frozen = true;
         emit Frozen(_msgSender());
     }
