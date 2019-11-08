@@ -1,18 +1,18 @@
 pragma solidity ^0.5.8;
 
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
+import "./BMTFreezable.sol";
 
 
-contract BMTVested is ERC20 {
+contract BMTVested is BMTFreezable {
 
     uint256 private _maxVestingDuration = 365 days;
     //address is the vested tokenholder
     //uint256 is the unixtime (epoche in seconds) the tokens are vested
     mapping (address => uint256) private _vestedMap;
 
-
     constructor()
-    public 
+    internal 
     ERC20() {}
     
     function isVested(address account) public view returns (bool) {

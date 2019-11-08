@@ -10,7 +10,7 @@ contract BMTMintable is BMTVested, ERC20Mintable {
     event DividendPayed(address indexed account, uint amount, string message);
     
     constructor()
-    public
+    internal
     BMTVested()
     ERC20Mintable() {}
 
