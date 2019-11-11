@@ -16,8 +16,8 @@ contract BMTMintable is BMTVested {
         address[] memory owners, 
         uint256[] memory amounts
     ) 
-    public
-    returns (bool)
+        public
+        returns (bool)
     {
         require(owners.length == amounts.length, "owners and amounts lenght missmatch");
     
@@ -33,8 +33,8 @@ contract BMTMintable is BMTVested {
         uint256[] memory amounts, 
         uint256[] memory vestingEndTimes
     ) 
-    public
-    returns (bool)
+        public
+        returns (bool)
     {
         require(owners.length == amounts.length, "owners and amounts lenght missmatch");
         require(owners.length == vestingEndTimes.length, "owners and vestingEndTime lenght missmatch");
@@ -53,8 +53,8 @@ contract BMTMintable is BMTVested {
         uint256[] memory amounts, 
         string memory message
     ) 
-    public
-    returns (bool)
+        public
+        returns (bool)
     {
         require(owners.length == amounts.length, "owners and amounts lenght missmatch");
 

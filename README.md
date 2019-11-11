@@ -14,6 +14,11 @@ Best practice: https://consensys.github.io/smart-contract-best-practices/
 - Freezed: Nothing allowed anymore
 - MinterRole / PauserRole: Really necessary? Or would "owner" be good enough? Separation of concern.
 
+**Voting questions and todos**
+- Protect start vote option
+- impl. self destruct
+- impl. testing
+
 ### TODO
 - Design a state machine
 

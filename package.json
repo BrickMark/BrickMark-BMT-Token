@@ -10,6 +10,7 @@
     "test": "truffle test",
     "build": "truffle compile",
     "flat": "truffle-flattener ./contracts/BMTToken.sol > ./BMTFlat.sol",
+    "flat2": "truffle-flattener ./contracts/BVTVotingToken.sol > ./BVTFlat.sol",
     "lint": "solhint \"contracts/**/*.sol\"",
     "coverage": "solidity-coverage",
     "ganache": "ganache-cli -m \"dial bulk garage popular robot horse hand click enhance clown clay despair\""
