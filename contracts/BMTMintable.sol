@@ -1,18 +1,16 @@
 pragma solidity ^0.5.8;
 
-import "openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol";
 import "./BMTVested.sol";
 
 
-contract BMTMintable is BMTVested, ERC20Mintable {
+contract BMTMintable is BMTVested {
 
     event AccountVested(address indexed account, uint256 endTime);
     event DividendPayed(address indexed account, uint amount, string message);
     
     constructor()
     internal
-    BMTVested()
-    ERC20Mintable() {}
+    BMTVested() {}
 
     function mintBatch(
         address[] memory owners, 
@@ -66,16 +64,5 @@ contract BMTMintable is BMTVested, ERC20Mintable {
         }
 
         return true;
-    }
-
-    function mint(
-        address account, 
-        uint256 amount
-    ) 
-    public 
-    whenNotFrozen 
-    returns (bool) 
-    {
-        return super.mint(account, amount);
     }
 }
