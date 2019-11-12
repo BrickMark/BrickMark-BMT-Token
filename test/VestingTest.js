@@ -10,7 +10,6 @@ contract("BMTToken Vesting test", async accounts => {
 
     const SECONDS_IN_DAY = 86400;
 
-
     beforeEach(async () => {
         let snapShot = await helper.takeSnapshot();
         snapshotId = snapShot['result'];
@@ -27,8 +26,7 @@ contract("BMTToken Vesting test", async accounts => {
 
         let now = Math.trunc(new Date().getTime() / 1000);
         console.log("time now: " + now);
-        let dayInSeconds = 60 * 60 * 24;
-        let lockTimes = [now + dayInSeconds]
+        let lockTimes = [now + SECONDS_IN_DAY]
 
         let result = await instance.mintBatchVested(recipients, amounts, lockTimes);
 
@@ -39,7 +37,7 @@ contract("BMTToken Vesting test", async accounts => {
             assert.equal(ex.reason, "Transfer not allowed. Vested sender.");
         }
 
-        await helper.advanceTimeAndBlock(dayInSeconds);
+        await helper.advanceTimeAndBlock(SECONDS_IN_DAY);
         await instance.transfer(bob, amounts[0], { from: alice });
 
         var balance = await instance.balanceOf(alice);
@@ -56,8 +54,7 @@ contract("BMTToken Vesting test", async accounts => {
 
         let now = Math.trunc(new Date().getTime() / 1000);
         console.log("time now: " + now);
-        let dayInSeconds = 60 * 60 * 24;
-        let lockTimes = [now + dayInSeconds]
+        let lockTimes = [now + SECONDS_IN_DAY]
 
         let result = await instance.mintBatchVested(recipients, amounts, lockTimes);
 
@@ -68,7 +65,7 @@ contract("BMTToken Vesting test", async accounts => {
             assert.equal(ex.reason, "Transfer not allowed. Vested sender.");
         }
 
-        await helper.advanceTimeAndBlock(dayInSeconds);
+        await helper.advanceTimeAndBlock(SECONDS_IN_DAY);
         await instance.transfer(bob, amounts[0], { from: alice });
 
         var balance = await instance.balanceOf(alice);

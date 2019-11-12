@@ -8,7 +8,10 @@ contract BVTState is ERC20Detailed, ERC20Mintable {
 
     enum State {init, voting, end}
     
-    uint256 internal _endTime = 0;
+    uint256 private _endTime = 0;
+    uint256 private _startTime = 0;
+
+    event VotingStarted(uint256 startTime, uint256 endTime);
 
     constructor() internal 
         ERC20Detailed("BrickMarkVotingToken", "BVT", 1)
@@ -24,24 +27,36 @@ contract BVTState is ERC20Detailed, ERC20Mintable {
         _;
     }
 
-    modifier whenEnd() {
-        require(getState() == State.end, "BVTState: not end state");
-        _;
-    }
+    // Currently not used at all
+    // modifier whenEnd() {
+    //     require(getState() == State.end, "BVTState: not end state");
+    //     _;
+    // }
 
     function getState() public view returns (State) {
-        if(_endTime == 0) return State.init;
-        if(_endTime > block.timestamp) return State.voting;
-        if(_endTime < block.timestamp && _endTime > 0) return State.end;
-        revert("Unexpected error. Invalid state.");
+        if(_endTime == 0) {
+            return State.init;
+        } else if(block.timestamp < _endTime) {
+            return State.voting;
+        } else {
+            return State.end;
+        }
+    }
+
+    function getStartTime() public view returns (uint256) {
+        return _startTime;
     }
 
     function getEndTime() public view returns (uint256) {
         return _endTime;
     }
 
-    function startVoting(uint256 endTime) public whenInit {
+    function startVoting(uint256 endTime) public whenInit onlyMinter returns (bool) {
         require(endTime > block.timestamp, "End time not in future");
+        _startTime = block.timestamp;
         _endTime = endTime;
+
+        emit VotingStarted(_startTime, _endTime);
+        return true;
     }
 }

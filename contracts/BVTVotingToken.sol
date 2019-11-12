@@ -11,14 +11,23 @@ contract BVTVotingToken is BVTMintable {
     uint8 private _votingOptions; 
     bytes private _hashedVotingText;
 
+    event VoteFor(uint8 indexed option, uint256 votes);
+
     constructor(
-        uint8 votingOptions, 
-        bytes memory hashedVotingText
-    ) 
+        bytes memory hashedVotingText,
+        uint8 votingOptions
+    )
     public 
     {
-        _votingOptions = votingOptions;
         _hashedVotingText = hashedVotingText;
+        _votingOptions = votingOptions;
+    }
+
+    modifier whenValidVotingOption(uint256 option) {
+       // uint256 option = uint256(recipient);
+        require(option > 0, "Option 0 never supported");
+        require(option <= _votingOptions, "Option out of range");
+        _;
     }
 
     function getVotingOptions() 
@@ -28,13 +37,6 @@ contract BVTVotingToken is BVTMintable {
         return _votingOptions;
     }
 
-    modifier whenValidVotingOption(address recipient) {
-        uint256 option = uint256(recipient);
-        require(option > 0, "Option 0 never supported");
-        require(option <= _votingOptions, "Option out of range");
-        _;
-    }
-
     function getHashedVotingText() 
         public view 
         returns (bytes memory) 
@@ -42,8 +44,9 @@ contract BVTVotingToken is BVTMintable {
         return _hashedVotingText;
     }
 
-    function getVotes(uint8 votingOption) 
+    function getVotesFor(uint8 votingOption) 
         public
+        whenValidVotingOption(votingOption)
         view
         returns (uint256) 
     {
@@ -51,12 +54,17 @@ contract BVTVotingToken is BVTMintable {
         return balanceOf(option);
     }
 
-    function vote(uint8 votingOption)
+    function vote(uint8 option)
         public
+        whenVoting 
+        whenValidVotingOption(option) 
         returns (bool)
     {
-        address option = address(votingOption);
-        return transfer(option, balanceOf(msg.sender));
+        address optionAsAddress = address(option);
+        uint256 votes = super.balanceOf(msg.sender);
+        
+        emit VoteFor(option, votes);
+        return super.transfer(optionAsAddress, votes);
     }
 
     function transfer(
@@ -65,9 +73,10 @@ contract BVTVotingToken is BVTMintable {
     )
         public 
         whenVoting 
-        whenValidVotingOption(recipient) 
+        whenValidVotingOption(uint8(recipient)) 
         returns (bool) 
     {
+        emit VoteFor(uint8(recipient), amount);
         return super.transfer(recipient, amount);
     }
 
@@ -78,9 +87,10 @@ contract BVTVotingToken is BVTMintable {
     )
         public 
         whenVoting 
-        whenValidVotingOption(recipient) 
+        whenValidVotingOption(uint8(recipient)) 
         returns (bool) 
     {
+        emit VoteFor(uint8(recipient), amount);
         return super.transferFrom(sender, recipient, amount);
     }
 }
