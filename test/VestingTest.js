@@ -28,22 +28,28 @@ contract("BMTToken Vesting test", async accounts => {
         console.log("time now: " + now);
         let lockTimes = [now + SECONDS_IN_DAY]
 
-        let result = await instance.mintBatchVested(recipients, amounts, lockTimes);
+        await instance.mintBatchVested(recipients, amounts, lockTimes);
+        let vestedAmount = await instance.vestedAmount.call(recipients[0]);
+        assert.equal(vestedAmount.toString(), amounts[0]);
 
         try {
             await instance.transfer(bob, amounts[0], { from: alice });
             assert.fail("VM Exception expected");
         } catch (ex) {
-            assert.equal(ex.reason, "Transfer not allowed. Vested sender.");
+            assert.equal(ex.reason, "Not allowed to spend vested amount");
         }
 
         await helper.advanceTimeAndBlock(SECONDS_IN_DAY);
+
+        vestedAmount = await instance.vestedAmount.call(recipients[0]);
+        assert.equal(vestedAmount, 0);
+
         await instance.transfer(bob, amounts[0], { from: alice });
 
-        var balance = await instance.balanceOf(alice);
+        var balance = await instance.balanceOf.call(alice);
         assert.equal(balance, 0);
 
-        balance = await instance.balanceOf(bob);
+        balance = await instance.balanceOf.call(bob);
         assert.equal(balance.toString(), amounts[0])
     });
 
@@ -62,16 +68,16 @@ contract("BMTToken Vesting test", async accounts => {
             await instance.transfer(bob, amounts[0], { from: alice });
             assert.fail("VM Exception expected");
         } catch (ex) {
-            assert.equal(ex.reason, "Transfer not allowed. Vested sender.");
+            assert.equal(ex.reason, "Not allowed to spend vested amount");
         }
 
         await helper.advanceTimeAndBlock(SECONDS_IN_DAY);
         await instance.transfer(bob, amounts[0], { from: alice });
 
-        var balance = await instance.balanceOf(alice);
+        var balance = await instance.balanceOf.call(alice);
         assert.equal(balance, 0);
 
-        balance = await instance.balanceOf(bob);
+        balance = await instance.balanceOf.call(bob);
         assert.equal(balance.toString(), amounts[0])
     });
 

@@ -41,7 +41,7 @@ contract BMTMintable is BMTVested {
     
         for (uint256 i = 0; i < owners.length; i++) {
             require(mint(owners[i], amounts[i]), "mint failed 2");
-            super._addVested(owners[i], vestingEndTimes[i]);
+            super._addVested(owners[i], amounts[i], vestingEndTimes[i]);
             emit AccountVested(owners[i], vestingEndTimes[i]);
         }
 
