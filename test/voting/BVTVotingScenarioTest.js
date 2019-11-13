@@ -28,31 +28,48 @@ contract("BVT Voting Scenario test", async accounts => {
         
         await instance.mintBatch(owners, amounts);
 
-        let state = await instance.getState();
+        let state = await instance.getState.call();
         assert.equal(state, 0);
 
+        let startTimeActual = await instance.getStartTime.call();
+        let endTimeActual = await instance.getEndTime.call();
+        assert.equal(startTimeActual, 0);
+        assert.equal(endTimeActual, 0);
+
         // Start Voting 
-        let now = Math.trunc(new Date().getTime() / 1000);        
-        await instance.startVoting(now + SECONDS_IN_DAY);
-        state = await instance.getState();
+        let now = Math.trunc(new Date().getTime() / 1000);
+        let endTime = now + SECONDS_IN_DAY;     
+        let result = await instance.startVoting(endTime);
+        let event = result.receipt.logs[0];
+        assert.equal(event.event, "VotingStarted");
+        assert.equal(event.args.endTime, endTime);
+
+        state = await instance.getState.call();
         assert.equal(state, 1);
+
+        endTimeActual = await instance.getEndTime.call();
+        assert.equal(endTimeActual, endTime);
 
         // Voting period
         await instance.transfer("0x0000000000000000000000000000000000000001", amounts[0], {from: owners[0]});
-        await instance.vote(0x2, {from: owners[1]});
+        result = await instance.vote(0x2, {from: owners[1]});
+        event = result.receipt.logs[0];
+        assert.equal(event.event, "VoteFor");
+        assert.equal(event.args.option, 2);  
+        assert.equal(event.args.votes.toString(), amounts[1]);  
 
         // Voting period is over
         await helper.advanceTimeAndBlock(SECONDS_IN_DAY);
-        state = await instance.getState();
+        state = await instance.getState.call();
         assert.equal(state, 2);
 
-        let result = await instance.getVotesFor(1);
+        result = await instance.getVotesFor.call(1);
         assert.equal(result.toString(), amounts[0]);
 
-        result = await instance.getVotesFor(2);
+        result = await instance.getVotesFor.call(2);
         assert.equal(result.toString(), amounts[1]);
 
-        result = await instance.getVotesFor(3);
+        result = await instance.getVotesFor.call(3);
         assert.equal(result.toString(), "0");
     });
 });
