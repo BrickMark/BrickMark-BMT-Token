@@ -12,6 +12,8 @@
     "flat": "truffle-flattener ./contracts/BMTToken.sol > ./BMTFlat.sol",
     "flat2": "truffle-flattener ./contracts/BVTVotingToken.sol > ./BVTFlat.sol",
     "lint": "solhint \"contracts/**/*.sol\"",
+    "lint2": "prettier --list-different **/*.sol",
+    "prettier": "prettier --write **/*.sol",
     "coverage": "solidity-coverage",
     "ganache": "ganache-cli -m \"dial bulk garage popular robot horse hand click enhance clown clay despair\""
   },
@@ -25,6 +27,8 @@
   "devDependencies": {
     "ganache-cli": "^6.7.0",
     "ganache-time-traveler": "^1.0.5",
+    "prettier": "^1.19.1",
+    "prettier-plugin-solidity": "^1.0.0-alpha.34",
     "solhint": "^2.3.0",
     "solidity-coverage": "^0.6.7",
     "truffle-flattener": "^1.4.2"

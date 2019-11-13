@@ -3,19 +3,19 @@ pragma solidity ^0.5.8;
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
 
-
 contract BVTState is ERC20Detailed, ERC20Mintable {
-
     enum State {init, voting, end}
-    
+
     uint256 private _endTime = 0;
     uint256 private _startTime = 0;
 
     event VotingStarted(uint256 startTime, uint256 endTime);
 
-    constructor() internal 
+    constructor()
+        internal
         ERC20Detailed("BrickMarkVotingToken", "BVT", 1)
-        ERC20Mintable() { }
+        ERC20Mintable()
+    {}
 
     modifier whenInit() {
         require(getState() == State.init, "BVTState: not init state");
@@ -34,9 +34,9 @@ contract BVTState is ERC20Detailed, ERC20Mintable {
     // }
 
     function getState() public view returns (State) {
-        if(_endTime == 0) {
+        if (_endTime == 0) {
             return State.init;
-        } else if(block.timestamp < _endTime) {
+        } else if (block.timestamp < _endTime) {
             return State.voting;
         } else {
             return State.end;
@@ -51,7 +51,12 @@ contract BVTState is ERC20Detailed, ERC20Mintable {
         return _endTime;
     }
 
-    function startVoting(uint256 endTime) public whenInit onlyMinter returns (bool) {
+    function startVoting(uint256 endTime)
+        public
+        whenInit
+        onlyMinter
+        returns (bool)
+    {
         require(endTime > block.timestamp, "End time not in future");
         _startTime = block.timestamp;
         _endTime = endTime;

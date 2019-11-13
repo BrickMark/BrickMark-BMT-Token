@@ -2,25 +2,25 @@ pragma solidity ^0.5.8;
 
 import "./BMTVested.sol";
 
-
 contract BMTMintable is BMTVested {
-
     event AccountVested(address indexed account, uint256 endTime);
-    event DividendPayed(address indexed account, uint amount, string message);
-    
-    constructor()
-    internal
-    BMTVested() {}
+    event DividendPayed(
+        address indexed account,
+        uint256 amount,
+        string message
+    );
 
-    function mintBatch(
-        address[] memory owners, 
-        uint256[] memory amounts
-    ) 
+    constructor() internal BMTVested() {}
+
+    function mintBatch(address[] memory owners, uint256[] memory amounts)
         public
         returns (bool)
     {
-        require(owners.length == amounts.length, "owners and amounts lenght missmatch");
-    
+        require(
+            owners.length == amounts.length,
+            "owners and amounts lenght missmatch"
+        );
+
         for (uint256 i = 0; i < owners.length; i++) {
             require(mint(owners[i], amounts[i]), "mint failed 1");
         }
@@ -29,16 +29,19 @@ contract BMTMintable is BMTVested {
     }
 
     function mintBatchVested(
-        address[] memory owners, 
-        uint256[] memory amounts, 
+        address[] memory owners,
+        uint256[] memory amounts,
         uint256[] memory vestingEndTimes
-    ) 
-        public
-        returns (bool)
-    {
-        require(owners.length == amounts.length, "owners and amounts lenght missmatch");
-        require(owners.length == vestingEndTimes.length, "owners and vestingEndTime lenght missmatch");
-    
+    ) public returns (bool) {
+        require(
+            owners.length == amounts.length,
+            "owners and amounts lenght missmatch"
+        );
+        require(
+            owners.length == vestingEndTimes.length,
+            "owners and vestingEndTime lenght missmatch"
+        );
+
         for (uint256 i = 0; i < owners.length; i++) {
             require(mint(owners[i], amounts[i]), "mint failed 2");
             super._addVested(owners[i], amounts[i], vestingEndTimes[i]);
@@ -49,14 +52,14 @@ contract BMTMintable is BMTVested {
     }
 
     function payDividend(
-        address[] memory owners, 
-        uint256[] memory amounts, 
+        address[] memory owners,
+        uint256[] memory amounts,
         string memory message
-    ) 
-        public
-        returns (bool)
-    {
-        require(owners.length == amounts.length, "owners and amounts lenght missmatch");
+    ) public returns (bool) {
+        require(
+            owners.length == amounts.length,
+            "owners and amounts lenght missmatch"
+        );
 
         for (uint256 i = 0; i < owners.length; i++) {
             require(mint(owners[i], amounts[i]), "mint failed 3");
