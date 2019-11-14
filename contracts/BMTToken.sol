@@ -7,6 +7,6 @@ contract BMTToken is ERC20Detailed, BMTMintable {
     constructor()
         public
         ERC20Detailed("BrickMarkToken", "BMT", 18)
-        ERC20Mintable()
+        BMTMintable()
     {}
 }

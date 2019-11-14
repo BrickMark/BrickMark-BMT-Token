@@ -1,14 +1,13 @@
 pragma solidity ^0.5.8;
 
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20Pausable.sol";
-import "openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol";
 
-contract BMTFreezable is ERC20Pausable, ERC20Mintable {
+contract BMTFreezable is ERC20Pausable {
     bool private _frozen;
 
     event Frozen(address indexed sender);
 
-    constructor() internal ERC20Mintable() {
+    constructor() internal ERC20Pausable() {
         _frozen = false;
     }
 
@@ -40,11 +39,12 @@ contract BMTFreezable is ERC20Pausable, ERC20Mintable {
     //     return super.transferFrom(sender, recipient, amount);
     // }
 
-    function mint(address account, uint256 amount)
-        public
-        whenNotFrozen
-        returns (bool)
-    {
-        return super.mint(account, amount);
-    }
+    // function mint(address account, uint256 amount)
+    //     public
+    //     whenNotFrozen
+    //     returns (bool)
+    // {
+    //     return super.mint(account, amount);
+    // }
+
 }

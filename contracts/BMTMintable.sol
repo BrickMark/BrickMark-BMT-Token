@@ -1,8 +1,9 @@
 pragma solidity ^0.5.8;
 
+import "openzeppelin-solidity/contracts/access/roles/MinterRole.sol";
 import "./BMTVested.sol";
 
-contract BMTMintable is BMTVested {
+contract BMTMintable is BMTVested, MinterRole {
     event AccountVested(address indexed account, uint256 endTime);
     event DividendPayed(
         address indexed account,
@@ -10,19 +11,19 @@ contract BMTMintable is BMTVested {
         string message
     );
 
-    constructor() internal BMTVested() {}
+    constructor() internal BMTVested() MinterRole() {}
 
     function mintBatch(address[] memory owners, uint256[] memory amounts)
         public
+        onlyMinter
+        whenNotPaused
         returns (bool)
     {
-        require(
-            owners.length == amounts.length,
-            "owners and amounts lenght missmatch"
-        );
+        require(owners.length == amounts.length, "lenght missmatch");
 
         for (uint256 i = 0; i < owners.length; i++) {
-            require(mint(owners[i], amounts[i]), "mint failed 1");
+            require(!super.isVested(owners[i]), "Cant mint to vested address");
+            super._mint(owners[i], amounts[i]);
         }
 
         return true;
@@ -32,18 +33,15 @@ contract BMTMintable is BMTVested {
         address[] memory owners,
         uint256[] memory amounts,
         uint256[] memory vestingEndTimes
-    ) public returns (bool) {
-        require(
-            owners.length == amounts.length,
-            "owners and amounts lenght missmatch"
-        );
-        require(
-            owners.length == vestingEndTimes.length,
-            "owners and vestingEndTime lenght missmatch"
-        );
+    ) public onlyMinter whenNotPaused returns (bool) {
+        require(owners.length == amounts.length, "lenght missmatch 1");
+        require(owners.length == vestingEndTimes.length, "lenght missmatch 2");
 
         for (uint256 i = 0; i < owners.length; i++) {
-            require(mint(owners[i], amounts[i]), "mint failed 2");
+            require(!super.isVested(owners[i]), "Cant mint to vested address");
+            require(super.balanceOf(owners[i]) == 0, "vesting req 0 balance");
+
+            super._mint(owners[i], amounts[i]);
             super._addVested(owners[i], amounts[i], vestingEndTimes[i]);
             emit AccountVested(owners[i], vestingEndTimes[i]);
         }
@@ -55,14 +53,11 @@ contract BMTMintable is BMTVested {
         address[] memory owners,
         uint256[] memory amounts,
         string memory message
-    ) public returns (bool) {
-        require(
-            owners.length == amounts.length,
-            "owners and amounts lenght missmatch"
-        );
+    ) public onlyMinter whenNotPaused returns (bool) {
+        require(owners.length == amounts.length, "lenght missmatch");
 
         for (uint256 i = 0; i < owners.length; i++) {
-            require(mint(owners[i], amounts[i]), "mint failed 3");
+            super._mint(owners[i], amounts[i]);
             emit DividendPayed(owners[i], amounts[i], message);
         }
 

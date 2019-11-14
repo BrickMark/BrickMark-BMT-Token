@@ -12,8 +12,7 @@ contract("BMTToken Minting test", async accounts => {
         let recipients = [alice, bob, carol];
         let amounts = ["1000000000000000000", "2000000000000000000", "3000000000000000000"]
         
-        let result = await instance.mintBatch(recipients, amounts);
-        console.dir(result);
+        await instance.mintBatch(recipients, amounts);
 
         for(var i=0; i<recipients.length; i++) {
             var balance = await instance.balanceOf.call(recipients[i]);
@@ -27,12 +26,10 @@ contract("BMTToken Minting test", async accounts => {
         let amounts = ["1000000000000000000", "2000000000000000000", "3000000000000000000"]
 
         let now = Math.trunc(new Date().getTime() / 1000);
-        console.log("time now: " + now);
         let day = 60 * 60 * 24;
         let lockTimes = [now + day, now + (2 * day), now + (3 * day)]
         
-        let result = await instance.mintBatchVested(recipients, amounts, lockTimes);
-        console.dir(result);
+        await instance.mintBatchVested(recipients, amounts, lockTimes);
 
         for(var i=0; i<recipients.length; i++) {
             var balance = await instance.balanceOf.call(recipients[i]);

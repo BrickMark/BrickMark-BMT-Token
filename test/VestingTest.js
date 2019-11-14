@@ -25,7 +25,6 @@ contract("BMTToken Vesting test", async accounts => {
         let amounts = ["1000000000000000000"]
 
         let now = Math.trunc(new Date().getTime() / 1000);
-        console.log("time now: " + now);
         let lockTimes = [now + SECONDS_IN_DAY]
 
         await instance.mintBatchVested(recipients, amounts, lockTimes);
@@ -53,16 +52,15 @@ contract("BMTToken Vesting test", async accounts => {
         assert.equal(balance.toString(), amounts[0])
     });
 
-    it("Vested Transfer Exception Test", async () => {
+    it("Vested Account can not transfer tokens", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let recipients = [alice];
         let amounts = ["1000000000000000000"]
 
         let now = Math.trunc(new Date().getTime() / 1000);
-        console.log("time now: " + now);
         let lockTimes = [now + SECONDS_IN_DAY]
 
-        let result = await instance.mintBatchVested(recipients, amounts, lockTimes);
+        await instance.mintBatchVested(recipients, amounts, lockTimes);
 
         try {
             await instance.transfer(bob, amounts[0], { from: alice });
@@ -81,17 +79,15 @@ contract("BMTToken Vesting test", async accounts => {
         assert.equal(balance.toString(), amounts[0])
     });
 
-    it("Vested Transfer or to vested account should fail", async () => {
+    it("Transfer tokens to vested recipient should fail", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amounts = ["1000000000000000000"]
 
         let now = Math.trunc(new Date().getTime() / 1000);
-        console.log("time now: " + now);
         let dayInSeconds = 60 * 60 * 24;
         let lockTimes = [now + dayInSeconds]
-
+        await instance.mintBatch([bob], amounts);
         await instance.mintBatchVested([alice], amounts, lockTimes);
-        await instance.mint(bob, amounts[0]);
 
         try {
             await instance.transfer(alice, amounts[0], { from: bob });
@@ -99,6 +95,59 @@ contract("BMTToken Vesting test", async accounts => {
         } catch (ex) {
             assert.equal(ex.reason, "Transfer not allowed. Vested recipient.");
         }
+    });
 
+    it("MintVested to an address with a balance should fail", async () => {
+        let instance = await BMTToken.new({ from: BrickMark });
+        let amount = "1000000000000000000";
+
+        let now = Math.trunc(new Date().getTime() / 1000);
+        let dayInSeconds = 60 * 60 * 24;
+        let lockTime = now + dayInSeconds
+
+        await instance.mintBatch([alice], [amount]);
+        
+        try {
+            await instance.mintBatchVested([alice], [amount], [lockTime]);
+            assert.fail("VM Exception expected");
+        } catch (ex) {
+            assert.equal(ex.reason, "vesting req 0 balance");
+        }
+    });
+
+    it("Mint to Vested address should fail", async () => {
+        let instance = await BMTToken.new({ from: BrickMark });
+        let amount = "1000000000000000000";
+
+        let now = Math.trunc(new Date().getTime() / 1000);
+        let dayInSeconds = 60 * 60 * 24;
+        let lockTime = now + dayInSeconds
+
+        await instance.mintBatchVested([alice], [amount], [lockTime]);
+        
+        try {
+            await instance.mintBatch([alice], [amount]);
+            assert.fail("VM Exception expected");
+        } catch (ex) {
+            assert.equal(ex.reason, "Cant mint to vested address");
+        }
+    });
+
+    it("MintBatch to Vested address should fail", async () => {
+        let instance = await BMTToken.new({ from: BrickMark });
+        let amount = "1000000000000000000";
+
+        let now = Math.trunc(new Date().getTime() / 1000);
+        let dayInSeconds = 60 * 60 * 24;
+        let lockTime = now + dayInSeconds
+
+        await instance.mintBatchVested([alice], [amount], [lockTime]);
+        
+        try {
+            await instance.mintBatch([alice], [amount]);
+            assert.fail("VM Exception expected");
+        } catch (ex) {
+            assert.equal(ex.reason, "Cant mint to vested address");
+        }
     });
 });

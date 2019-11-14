@@ -12,8 +12,7 @@ contract("BVT Minting test", async accounts => {
         let recipients = [alice, bob, carol];
         let amounts = ["1000000000000000000", "2000000000000000000", "3000000000000000000"]
         
-        let result = await instance.mintBatch(recipients, amounts);
-        console.dir(result);
+        await instance.mintBatch(recipients, amounts);
 
         for(var i=0; i<recipients.length; i++) {
             var balance = await instance.balanceOf.call(recipients[i]);

@@ -14,7 +14,6 @@ contract("BMTToken DividendAndVestingTest test", async accounts => {
         let amount = "1000000000000000000";
         
         let now = Math.trunc(new Date().getTime() / 1000);
-        console.log("time now: " + now);
         let lockTime = now + SECONDS_IN_DAY;
 
         await instance.mintBatchVested([alice], [amount], [lockTime]);
