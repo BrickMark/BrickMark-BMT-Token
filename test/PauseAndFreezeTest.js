@@ -59,19 +59,7 @@ contract("BMTToken PauseAndFreeze test", async accounts => {
         }
     });
 
-    // it("Pause mint should be possible", async () => {
-    //     let instance = await BMTToken.new({ from: BrickMark });
-    //     let amount = "1000000000000000000";
-
-    //     await instance.pause();
-        
-    //     await instance.mintBatch([alice], [amount]);
-    //     await instance.payDividend([alice], [amount], "Dividend for Alice");
-    //     let now = Math.trunc(new Date().getTime() / 1000);
-    //     await instance.mintBatchVested([alice], [amount], [now + 3600]);
-    // });
-
-    it("Freeze mint should NOT be possible", async () => {
+    it("Paused: mintBatch should NOT be possible", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000";
 
@@ -84,6 +72,29 @@ contract("BMTToken PauseAndFreeze test", async accounts => {
         } catch (ex) {
             assert.equal(ex.reason, "Pausable: paused");
         }
+    });
+
+    it("Paused: mintBatchVested should NOT be possible", async () => {
+        let instance = await BMTToken.new({ from: BrickMark });
+        let amount = "1000000000000000000";
+
+        await instance.pause();
+        await instance.freeze();
+
+        try {
+            let now = Math.trunc(new Date().getTime() / 1000);
+            await instance.mintBatchVested([alice], [amount], [now + 3600]);
+            assert.fail("VM Exception expected");
+        } catch (ex) {
+            assert.equal(ex.reason, "Pausable: paused");
+        }
+    });
+
+    it("Paused: pay dividend should NOT be possible", async () => {
+        let instance = await BMTToken.new({ from: BrickMark });
+        let amount = "1000000000000000000";
+
+        await instance.pause();
 
         try {
             await instance.payDividend([alice], [amount], "Dividend for Alice");
@@ -91,10 +102,48 @@ contract("BMTToken PauseAndFreeze test", async accounts => {
         } catch (ex) {
             assert.equal(ex.reason, "Pausable: paused");
         }
+    });
+
+    it("Frozen: mintBatch should NOT be possible", async () => {
+        let instance = await BMTToken.new({ from: BrickMark });
+        let amount = "1000000000000000000";
+
+        await instance.pause();
+        await instance.freeze();
+
+        try {
+            await instance.mintBatch([alice], [amount]);
+            assert.fail("VM Exception expected");
+        } catch (ex) {
+            assert.equal(ex.reason, "Pausable: paused");
+        }
+    });
+
+    it("Frozen: mintBatchVested should NOT be possible", async () => {
+        let instance = await BMTToken.new({ from: BrickMark });
+        let amount = "1000000000000000000";
+
+        await instance.pause();
+        await instance.freeze();
 
         try {
             let now = Math.trunc(new Date().getTime() / 1000);
             await instance.mintBatchVested([alice], [amount], [now + 3600]);
+            assert.fail("VM Exception expected");
+        } catch (ex) {
+            assert.equal(ex.reason, "Pausable: paused");
+        }
+    });
+
+    it("Frozen: pay dividend should NOT be possible", async () => {
+        let instance = await BMTToken.new({ from: BrickMark });
+        let amount = "1000000000000000000";
+
+        await instance.pause();
+        await instance.freeze();
+
+        try {
+            await instance.payDividend([alice], [amount], "Dividend for Alice");
             assert.fail("VM Exception expected");
         } catch (ex) {
             assert.equal(ex.reason, "Pausable: paused");
