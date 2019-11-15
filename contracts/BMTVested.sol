@@ -43,15 +43,12 @@ contract BMTVested is BMTFreezable {
         internal
     {
         require(isVested(account) == false, "account already vested");
-        require(
-            endTime >= block.timestamp,
-            "Vesting endtime can not be in the past"
-        );
+        require(endTime >= block.timestamp, "Invalid time");
+        require(amount > 0, "amount to vest too small");
         require(
             endTime < block.timestamp + _maxVestingDuration,
-            "Vesting exceeds duration"
+            "exceeds duration"
         );
-        require(amount > 0, "amount to vest too small");
 
         _vestedEndTimeMap[account] = endTime;
         _vestedAmountsMap[account] = amount;
@@ -61,15 +58,9 @@ contract BMTVested is BMTFreezable {
         internal
     {
         //require(isVested(sender) == false, "Transfer not allowed. Vested sender.");
-        require(
-            isVested(recipient) == false,
-            "Transfer not allowed. Vested recipient."
-        );
+        require(isVested(recipient) == false, "Vested recipient");
         if (isVested(sender)) {
-            require(
-                spendableAmount(sender) >= amount,
-                "Not allowed to spend vested amount"
-            );
+            require(spendableAmount(sender) >= amount, "Tokens vested");
         }
 
         super._transfer(sender, recipient, amount);

@@ -35,7 +35,7 @@ contract("BMTToken Vesting test", async accounts => {
             await instance.transfer(bob, amounts[0], { from: alice });
             assert.fail("VM Exception expected");
         } catch (ex) {
-            assert.equal(ex.reason, "Not allowed to spend vested amount");
+            assert.equal(ex.reason, "Tokens vested");
         }
 
         await helper.advanceTimeAndBlock(SECONDS_IN_DAY);
@@ -66,7 +66,7 @@ contract("BMTToken Vesting test", async accounts => {
             await instance.transfer(bob, amounts[0], { from: alice });
             assert.fail("VM Exception expected");
         } catch (ex) {
-            assert.equal(ex.reason, "Not allowed to spend vested amount");
+            assert.equal(ex.reason, "Tokens vested");
         }
 
         await helper.advanceTimeAndBlock(SECONDS_IN_DAY);
@@ -93,7 +93,7 @@ contract("BMTToken Vesting test", async accounts => {
             await instance.transfer(alice, amounts[0], { from: bob });
             assert.fail("VM Exception expected");
         } catch (ex) {
-            assert.equal(ex.reason, "Transfer not allowed. Vested recipient.");
+            assert.equal(ex.reason, "Vested recipient");
         }
     });
 

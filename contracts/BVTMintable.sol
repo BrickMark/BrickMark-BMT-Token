@@ -10,10 +10,7 @@ contract BVTMintable is BVTState {
         whenInit()
         returns (bool)
     {
-        require(
-            owners.length == amounts.length,
-            "owners and amounts lenght missmatch"
-        );
+        require(owners.length == amounts.length, "lenght missmatch");
 
         for (uint256 i = 0; i < owners.length; i++) {
             require(mint(owners[i], amounts[i]), "mint failed 1");

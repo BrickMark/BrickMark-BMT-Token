@@ -6,9 +6,7 @@ Best practice: https://consensys.github.io/smart-contract-best-practices/
 
 ## Qestions to clarify
 
-- Paused: Should mint still be allowed
-- Freezed: Nothing allowed anymore
-- MinterRole / PauserRole: Really necessary? Or would "owner" be good enough? Separation of concern.
+- Writeable functions such as update roles are still active in state freeze and paused. What todo?
 
 **Voting questions and todos**
 - Protect start vote option
@@ -16,9 +14,6 @@ Best practice: https://consensys.github.io/smart-contract-best-practices/
 - impl. testing
 - remove standard mint function
 - only owner enough?
-
-### TODO
-- Design a state machine
 
 ## Requirements
 
