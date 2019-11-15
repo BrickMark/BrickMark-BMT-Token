@@ -14,6 +14,10 @@ Best practice: https://consensys.github.io/smart-contract-best-practices/
 - impl. testing
 - remove standard mint function
 - only owner enough?
+- voting: Constructor should validate parameters. E.g. votingOptions 0
+- voting: adding out of range tests
+- All state changes should emit an event
+- MultiSig test
 
 ## Requirements
 

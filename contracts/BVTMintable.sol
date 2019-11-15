@@ -7,13 +7,14 @@ contract BVTMintable is BVTState {
 
     function mintBatch(address[] memory owners, uint256[] memory amounts)
         public
-        whenInit()
+        whenInit
+        onlyMinter
         returns (bool)
     {
         require(owners.length == amounts.length, "lenght missmatch");
 
         for (uint256 i = 0; i < owners.length; i++) {
-            require(mint(owners[i], amounts[i]), "mint failed 1");
+            super._mint(owners[i], amounts[i]);
         }
 
         return true;

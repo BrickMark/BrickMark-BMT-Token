@@ -1,9 +1,10 @@
 pragma solidity ^0.5.8;
 
-import "openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol";
+import "openzeppelin-solidity/contracts/access/roles/MinterRole.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 
-contract BVTState is ERC20Detailed, ERC20Mintable {
+contract BVTState is ERC20, ERC20Detailed, MinterRole {
     enum State {init, voting, end}
 
     uint256 private _endTime = 0;
@@ -11,11 +12,7 @@ contract BVTState is ERC20Detailed, ERC20Mintable {
 
     event VotingStarted(uint256 startTime, uint256 endTime);
 
-    constructor()
-        internal
-        ERC20Detailed("BrickMarkVotingToken", "BVT", 1)
-        ERC20Mintable()
-    {}
+    constructor() internal ERC20Detailed("BrickMarkVotingToken", "BVT", 1) {}
 
     modifier whenInit() {
         require(getState() == State.init, "BVTState: not init state");
@@ -63,5 +60,9 @@ contract BVTState is ERC20Detailed, ERC20Mintable {
 
         emit VotingStarted(_startTime, _endTime);
         return true;
+    }
+
+    function abortVoting() public whenInit onlyMinter returns (bool) {
+        selfdestruct(msg.sender);
     }
 }

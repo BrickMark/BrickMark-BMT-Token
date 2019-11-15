@@ -37,7 +37,7 @@ contract BVTVotingToken is BVTMintable {
         returns (uint256)
     {
         address option = address(votingOption);
-        return balanceOf(option);
+        return super.balanceOf(option);
     }
 
     function vote(uint8 option)
