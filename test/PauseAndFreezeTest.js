@@ -1,3 +1,4 @@
+const truffleAssert = require('truffle-assertions');
 const BMTToken = artifacts.require("./BMTToken.sol");
 
 contract("BMTToken PauseAndFreeze test", async accounts => {
@@ -15,12 +16,10 @@ contract("BMTToken PauseAndFreeze test", async accounts => {
 
         await instance.pause();
 
-        try {
-            await instance.transfer(bob, amount, { from: alice });
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "Pausable: paused");
-        }
+        await truffleAssert.reverts(
+            instance.transfer(bob, amount, { from: alice }),
+            "Pausable: paused"
+        );
 
         await instance.unpause();
         await instance.transfer(bob, amount, { from: alice });
@@ -44,109 +43,94 @@ contract("BMTToken PauseAndFreeze test", async accounts => {
         frozen = await instance.isFrozen();
         assert(frozen, "it should be frozen");
 
-        try {
-            await instance.transfer(bob, amount, { from: alice });
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "Pausable: paused");
-        }
+        await truffleAssert.reverts(
+            instance.transfer(bob, amount, { from: alice }),
+            "Pausable: paused"
+        );
 
-        try {
-            await instance.unpause();
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "BMTFreezable: frozen");
-        }
+        await truffleAssert.reverts(
+            instance.unpause(),
+            "BMTFreezable: frozen"
+        );
     });
 
-    it("Paused: mintBatch should NOT be possible", async () => {
+    it("Paused - mintBatch should NOT be possible", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000";
 
         await instance.pause();
         await instance.freeze();
 
-        try {
-            await instance.mintBatch([alice], [amount]);
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "Pausable: paused");
-        }
+        await truffleAssert.reverts(
+            instance.mintBatch([alice], [amount]),
+            "Pausable: paused"
+        );
     });
 
-    it("Paused: mintBatchVested should NOT be possible", async () => {
+    it("Paused - mintBatchVested should NOT be possible", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000";
 
         await instance.pause();
         await instance.freeze();
 
-        try {
-            let now = Math.trunc(new Date().getTime() / 1000);
-            await instance.mintBatchVested([alice], [amount], [now + 3600]);
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "Pausable: paused");
-        }
+        let now = Math.trunc(new Date().getTime() / 1000);
+        await truffleAssert.reverts(
+            instance.mintBatchVested([alice], [amount], [now + 3600]),
+            "Pausable: paused"
+        );
     });
 
-    it("Paused: pay dividend should NOT be possible", async () => {
+    it("Paused - pay dividend should NOT be possible", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000";
 
         await instance.pause();
 
-        try {
-            await instance.payDividend([alice], [amount], "Dividend for Alice");
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "Pausable: paused");
-        }
+        await truffleAssert.reverts(
+            instance.payDividend([alice], [amount], "Dividend for Alice"),
+            "Pausable: paused"
+        );
     });
 
-    it("Frozen: mintBatch should NOT be possible", async () => {
-        let instance = await BMTToken.new({ from: BrickMark });
-        let amount = "1000000000000000000";
-
-        await instance.pause();
-        await instance.freeze();
-
-        try {
-            await instance.mintBatch([alice], [amount]);
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "Pausable: paused");
-        }
-    });
-
-    it("Frozen: mintBatchVested should NOT be possible", async () => {
+    it("Frozen - mintBatch should NOT be possible", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000";
 
         await instance.pause();
         await instance.freeze();
 
-        try {
-            let now = Math.trunc(new Date().getTime() / 1000);
-            await instance.mintBatchVested([alice], [amount], [now + 3600]);
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "Pausable: paused");
-        }
+
+        await truffleAssert.reverts(
+            instance.mintBatch([alice], [amount]),
+            "Pausable: paused"
+        );
     });
 
-    it("Frozen: pay dividend should NOT be possible", async () => {
+    it("Frozen - mintBatchVested should NOT be possible", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000";
 
         await instance.pause();
         await instance.freeze();
 
-        try {
-            await instance.payDividend([alice], [amount], "Dividend for Alice");
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "Pausable: paused");
-        }
+        let now = Math.trunc(new Date().getTime() / 1000);
+        await truffleAssert.reverts(
+            instance.mintBatchVested([alice], [amount], [now + 3600]),
+            "Pausable: paused"
+        );
+    });
+
+    it("Frozen - pay dividend should NOT be possible", async () => {
+        let instance = await BMTToken.new({ from: BrickMark });
+        let amount = "1000000000000000000";
+
+        await instance.pause();
+        await instance.freeze();
+
+        await truffleAssert.reverts(
+            instance.payDividend([alice], [amount], "Dividend for Alice"),
+            "Pausable: paused"
+        );
     });
 });
