@@ -1,4 +1,5 @@
 const helper = require("ganache-time-traveler");
+const truffleAssert = require('truffle-assertions');
 const BVTToken = artifacts.require("./BVTVotingToken.sol");
 
 contract("BVT abortVoting test", async accounts => {
@@ -21,33 +22,16 @@ contract("BVT abortVoting test", async accounts => {
         await instance.name.call();
         await instance.abortVoting();
 
-        try {
-            await instance.name.call();
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert(
-                ex
-                    .toString()
-                    .startsWith(
-                        "Error: Returned values aren't valid, did it run Out of Gas?"
-                    )
-            );
-        }
+        await truffleAssert.fails(instance.name.call(), "Returned values aren't valid, did it run Out of Gas?");
     });
 
     it("abortVoting: Init state not minter tries to abort. Fail", async () => {
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
 
-        try {
-            await instance.abortVoting({ from: alice });
-
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(
-                ex.reason,
-                "MinterRole: caller does not have the Minter role"
-            );
-        }
+        await truffleAssert.reverts(
+            instance.abortVoting({ from: alice }),
+            "MinterRole: caller does not have the Minter role"
+        );
     });
 
     it("abortVoting: Voting state abort should fail", async () => {
@@ -57,12 +41,10 @@ contract("BVT abortVoting test", async accounts => {
         let endTime = now + SECONDS_IN_DAY;
         await instance.startVoting(endTime);
 
-        try {
-            await instance.abortVoting();
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "BVTState: not init state");
-        }
+        await truffleAssert.reverts(
+            instance.abortVoting({ from: alice }),
+            "BVTState: not init state"
+        );
     });
 
     it("abortVoting: End state abort should fail", async () => {
@@ -78,11 +60,9 @@ contract("BVT abortVoting test", async accounts => {
         state = await instance.getState.call();
         assert.equal(state, 2);
 
-        try {
-            await instance.abortVoting();
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "BVTState: not init state");
-        }
+        await truffleAssert.reverts(
+            instance.abortVoting({ from: alice }),
+            "BVTState: not init state"
+        );
     });
 });
