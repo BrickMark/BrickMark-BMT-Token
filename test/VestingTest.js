@@ -1,4 +1,5 @@
 const helper = require('ganache-time-traveler');
+const truffleAssert = require('truffle-assertions');
 const BMTToken = artifacts.require("./BMTToken.sol");
 
 contract("BMTToken Vesting test", async accounts => {
@@ -31,12 +32,10 @@ contract("BMTToken Vesting test", async accounts => {
         let vestedAmount = await instance.vestedAmount.call(recipients[0]);
         assert.equal(vestedAmount.toString(), amounts[0]);
 
-        try {
-            await instance.transfer(bob, amounts[0], { from: alice });
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "Tokens vested");
-        }
+        await truffleAssert.reverts(
+            instance.transfer(bob, amounts[0], { from: alice }),
+            "Tokens vested"
+        );
 
         await helper.advanceTimeAndBlock(SECONDS_IN_DAY);
 
@@ -62,12 +61,10 @@ contract("BMTToken Vesting test", async accounts => {
 
         await instance.mintBatchVested(recipients, amounts, lockTimes);
 
-        try {
-            await instance.transfer(bob, amounts[0], { from: alice });
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "Tokens vested");
-        }
+        await truffleAssert.reverts(
+            instance.transfer(bob, amounts[0], { from: alice }),
+            "Tokens vested"
+        );
 
         await helper.advanceTimeAndBlock(SECONDS_IN_DAY);
         await instance.transfer(bob, amounts[0], { from: alice });
@@ -89,15 +86,13 @@ contract("BMTToken Vesting test", async accounts => {
         await instance.mintBatch([bob], amounts);
         await instance.mintBatchVested([alice], amounts, lockTimes);
 
-        try {
-            await instance.transfer(alice, amounts[0], { from: bob });
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "Vested recipient");
-        }
+        await truffleAssert.reverts(
+            instance.transfer(alice, amounts[0], { from: bob }),
+            "Vested recipient"
+        );
     });
 
-    it("MintVested to an address with a balance should fail", async () => {
+    it("MintBatchVested to an address with a balance should fail", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000";
 
@@ -107,15 +102,13 @@ contract("BMTToken Vesting test", async accounts => {
 
         await instance.mintBatch([alice], [amount]);
         
-        try {
-            await instance.mintBatchVested([alice], [amount], [lockTime]);
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "vesting req 0 balance");
-        }
+        await truffleAssert.reverts(
+            instance.mintBatchVested([alice], [amount], [lockTime]),
+            "vesting req 0 balance"
+        );
     });
 
-    it("Mint to Vested address should fail", async () => {
+    it("MintBatchVested to Vested address should fail", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000";
 
@@ -125,12 +118,10 @@ contract("BMTToken Vesting test", async accounts => {
 
         await instance.mintBatchVested([alice], [amount], [lockTime]);
         
-        try {
-            await instance.mintBatch([alice], [amount]);
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "Cant mint to vested address");
-        }
+        await truffleAssert.reverts(
+            instance.mintBatch([alice], [amount]),
+            "Cant mint to vested address"
+        );
     });
 
     it("MintBatch to Vested address should fail", async () => {
@@ -143,11 +134,9 @@ contract("BMTToken Vesting test", async accounts => {
 
         await instance.mintBatchVested([alice], [amount], [lockTime]);
         
-        try {
-            await instance.mintBatch([alice], [amount]);
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "Cant mint to vested address");
-        }
+        await truffleAssert.reverts(
+            instance.mintBatch([alice], [amount]),
+            "Cant mint to vested address"
+        );
     });
 });
