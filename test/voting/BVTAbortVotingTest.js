@@ -37,6 +37,8 @@ contract("BVT abortVoting test", async accounts => {
     it("abortVoting: Voting state abort should fail", async () => {
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
 
+        await instance.mintBatch([alice], [1]);
+
         let now = Math.trunc(new Date().getTime() / 1000);
         let endTime = now + SECONDS_IN_DAY;
         await instance.startVoting(endTime);
@@ -50,6 +52,8 @@ contract("BVT abortVoting test", async accounts => {
     it("abortVoting: End state abort should fail", async () => {
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
 
+        await instance.mintBatch([alice], [1]);
+        
         // start voting
         let now = Math.trunc(new Date().getTime() / 1000);
         let endTime = now + SECONDS_IN_DAY;

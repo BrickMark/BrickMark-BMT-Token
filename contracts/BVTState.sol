@@ -56,6 +56,7 @@ contract BVTState is ERC20, ERC20Detailed, MinterRole {
     {
         require(endTime > block.timestamp, "End time not in future");
         require(endTime < block.timestamp + 100 days, "Too long");
+        require(totalSupply() > 0, "No voting tokens");
 
         _startTime = block.timestamp;
         _endTime = endTime;

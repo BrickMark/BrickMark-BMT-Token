@@ -55,15 +55,16 @@ contract("BVT VotingEdgeCases test", async accounts => {
         assert.equal(state.toString(), "2");
 
         await truffleAssert.reverts(
-            instance.transfer(
-                "0x0000000000000000000000000000000000000001",
-                amount,
-                { from: alice }
-            ),
+            instance.transfer("0x0000000000000000000000000000000000000001", amount, {
+                from: alice
+            }),
             "BVTState: not voting state"
         );
 
-        await truffleAssert.reverts(instance.vote(1, { from: alice }), "BVTState: not voting state");
+        await truffleAssert.reverts(
+            instance.vote(1, { from: alice }),
+            "BVTState: not voting state"
+        );
     });
 
     it("BVT Voting: Start voting with invalid time", async () => {
@@ -72,6 +73,37 @@ contract("BVT VotingEdgeCases test", async accounts => {
 
         await instance.mintBatch([alice], [amount]);
 
-        await truffleAssert.reverts(instance.startVoting(1234), "End time not in future");
+        await truffleAssert.reverts(
+            instance.startVoting(1234),
+            "End time not in future"
+        );
+    });
+
+    it("BVT Voting: Exceeding voting period", async () => {
+        let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
+        let amount = "1000000000000000000";
+
+        await instance.mintBatch([alice], [amount]);
+
+        let now = Math.trunc(new Date().getTime() / 1000);
+        let endTime = now + SECONDS_IN_DAY * 100;
+
+        await truffleAssert.reverts(
+            instance.startVoting(endTime),
+            "Too long"
+        );
+    });
+
+    it("BVT Voting: Start voting without minting", async () => {
+        let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
+        let amount = "1000000000000000000";
+
+        let now = Math.trunc(new Date().getTime() / 1000);
+        let endTime = now + SECONDS_IN_DAY;
+
+        await truffleAssert.reverts(
+            instance.startVoting(endTime),
+            "No voting tokens"
+        );
     });
 });

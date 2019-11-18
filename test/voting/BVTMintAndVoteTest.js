@@ -1,7 +1,8 @@
 const helper = require("ganache-time-traveler");
+const truffleAssert = require('truffle-assertions');
 const BVTToken = artifacts.require("./BVTVotingToken.sol");
 
-contract("BVT Minting test", async accounts => {
+contract("BVT - Mint and Vote test", async accounts => {
 
     const SECONDS_IN_DAY = 86400;
 
@@ -19,7 +20,7 @@ contract("BVT Minting test", async accounts => {
         await helper.revertToSnapshot(snapshotId);
     });
 
-    it("BVT mintBatch", async () => {
+    it("BVT - mintBatch", async () => {
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
         let recipients = [alice, bob, carol];
         let amounts = [
@@ -36,7 +37,19 @@ contract("BVT Minting test", async accounts => {
         }
     });
 
-    it("BVT mintBatch and Transfer", async () => {
+    it("BVT - MintBatch length missmatch 1", async () => {
+        let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
+
+        let recipients = [alice, bob, carol];
+        let amounts = ["1000000000000000000", "2000000000000000000"]
+
+        await truffleAssert.reverts(
+            instance.mintBatch(recipients, amounts),
+            "length missmatch"
+        );
+    });
+
+    it("BVT - Vote with Transfer", async () => {
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
         let recipients = [alice, bob, carol];
         let amounts = [
@@ -61,7 +74,7 @@ contract("BVT Minting test", async accounts => {
         assert.equal(balance.toString(), "1000000000000000000");
     });
 
-    it("BVT mintBatch and TransferFrom", async () => {
+    it("BVT - Vote with TransferFrom", async () => {
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
 
         let amount = "2000000000000000000";
@@ -72,8 +85,28 @@ contract("BVT Minting test", async accounts => {
         let endTime = now + SECONDS_IN_DAY;
         await instance.startVoting(endTime);
 
-        await instance.approve(alice, amount, {from: bob});
+        await instance.approve(alice, amount, { from: bob });
         await instance.transferFrom(bob, "0x0000000000000000000000000000000000000001", amount, { from: alice });
+
+        var balance = await instance.balanceOf.call(bob);
+        assert.equal(balance.toString(), "0");
+
+        balance = await instance.balanceOf.call("0x0000000000000000000000000000000000000001");
+        assert.equal(balance.toString(), amount);
+    });
+
+    it("BVT - Vote with Vote", async () => {
+        let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
+
+        let amount = "2000000000000000000";
+        await instance.mintBatch([bob], [amount]);
+
+        // start voting
+        let now = Math.trunc(new Date().getTime() / 1000);
+        let endTime = now + SECONDS_IN_DAY;
+        await instance.startVoting(endTime);
+
+        await instance.vote(1, { from: bob });
 
         var balance = await instance.balanceOf.call(bob);
         assert.equal(balance.toString(), "0");
