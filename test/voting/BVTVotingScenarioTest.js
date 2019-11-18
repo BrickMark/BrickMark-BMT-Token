@@ -22,8 +22,16 @@ contract("BVT Voting Scenario test", async accounts => {
 
     it("Voting Scenario 1", async () => {
 
-        // Deploy and Minting
+        // Deploy Voting contract
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
+
+        let result = await instance.getVotingOptions.call();
+        assert.equal(result, 3);
+
+        result = await instance.getHashedVotingText.call();
+        assert.equal(result, 0xff);
+        
+        // Minting
         let owners = [alice, bob, carol];
         let amounts = ["1000000000000000000", "2000000000000000000", "3000000000000000000"]
 
@@ -40,7 +48,7 @@ contract("BVT Voting Scenario test", async accounts => {
         // Start Voting 
         let now = Math.trunc(new Date().getTime() / 1000);
         let endTime = now + SECONDS_IN_DAY;
-        let result = await instance.startVoting(endTime);
+        result = await instance.startVoting(endTime);
 
         truffleAssert.eventEmitted(result, 'VotingStarted', (ev) => {
             return ev.endTime.toString() === endTime.toString();

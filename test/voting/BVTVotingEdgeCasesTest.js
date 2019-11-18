@@ -2,7 +2,7 @@ const helper = require("ganache-time-traveler");
 const truffleAssert = require("truffle-assertions");
 const BVTToken = artifacts.require("./BVTVotingToken.sol");
 
-contract("BVT VotingEdgeCases test", async accounts => {
+contract("BVT Edge-Cases test", async accounts => {
     const SECONDS_IN_DAY = 86400;
 
     const BrickMark = accounts[0];
@@ -19,7 +19,7 @@ contract("BVT VotingEdgeCases test", async accounts => {
         await helper.revertToSnapshot(snapshotId);
     });
 
-    it("BVT Voting: When init state should fail", async () => {
+    it("Edge-Cases - When init state should fail", async () => {
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
         let amount = "1000000000000000000";
 
@@ -38,7 +38,7 @@ contract("BVT VotingEdgeCases test", async accounts => {
         );
     });
 
-    it("BVT Voting: When end state should fail", async () => {
+    it("Edge-Cases - When end state should fail", async () => {
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
         let amount = "1000000000000000000";
 
@@ -67,7 +67,7 @@ contract("BVT VotingEdgeCases test", async accounts => {
         );
     });
 
-    it("BVT Voting: Start voting with invalid time", async () => {
+    it("Edge-Cases - Start voting with invalid time", async () => {
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
         let amount = "1000000000000000000";
 
@@ -79,7 +79,7 @@ contract("BVT VotingEdgeCases test", async accounts => {
         );
     });
 
-    it("BVT Voting: Exceeding voting period", async () => {
+    it("Edge-Cases - Exceeding voting period", async () => {
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
         let amount = "1000000000000000000";
 
@@ -94,7 +94,7 @@ contract("BVT VotingEdgeCases test", async accounts => {
         );
     });
 
-    it("BVT Voting: Start voting without minting", async () => {
+    it("Edge-Cases - Start voting without minting", async () => {
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
         let amount = "1000000000000000000";
 
@@ -104,6 +104,47 @@ contract("BVT VotingEdgeCases test", async accounts => {
         await truffleAssert.reverts(
             instance.startVoting(endTime),
             "No voting tokens"
+        );
+    });
+
+    it("Edge-Cases - Invalid constructor param value", async () => {
+        await truffleAssert.reverts(
+            BVTToken.new("0xff", 0, { from: BrickMark }),
+            "options required"
+        );
+    });
+
+    it("Edge-Cases - Vote with option 0. Fail", async () => {
+        let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
+
+        let amount = "2000000000000000000";
+        await instance.mintBatch([bob], [amount]);
+
+        // start voting
+        let now = Math.trunc(new Date().getTime() / 1000);
+        let endTime = now + SECONDS_IN_DAY;
+        await instance.startVoting(endTime);
+
+        await truffleAssert.reverts(
+            instance.vote(0, { from: bob }),
+            "Option 0 never supported"
+        );
+    });
+
+    it("Edge-Cases - Vote with option 4 of 3. Fail", async () => {
+        let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
+
+        let amount = "2000000000000000000";
+        await instance.mintBatch([bob], [amount]);
+
+        // start voting
+        let now = Math.trunc(new Date().getTime() / 1000);
+        let endTime = now + SECONDS_IN_DAY;
+        await instance.startVoting(endTime);
+
+        await truffleAssert.reverts(
+            instance.vote(4, { from: bob }),
+            "Option out of range"
         );
     });
 });
