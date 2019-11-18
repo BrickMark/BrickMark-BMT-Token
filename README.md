@@ -10,14 +10,10 @@ Best practice: https://consensys.github.io/smart-contract-best-practices/
 - How long is a voting? What's the max duration? 100 days
 
 **Voting questions and todos**
-- impl. self destruct
-- impl. testing
-- remove standard mint function
-- only owner enough?
-- voting: Constructor should validate parameters. E.g. votingOptions 0
 - voting: adding out of range tests
 - All state changes should emit an event
 - MultiSig test
+- Event VoteFor test for vote, transfer and transferFrom function
 
 ## Requirements
 
