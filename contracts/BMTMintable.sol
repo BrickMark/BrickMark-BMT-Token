@@ -19,7 +19,7 @@ contract BMTMintable is BMTVested, MinterRole {
         whenNotPaused
         returns (bool)
     {
-        require(owners.length == amounts.length, "lenght missmatch");
+        require(owners.length == amounts.length, "length missmatch");
 
         for (uint256 i = 0; i < owners.length; i++) {
             require(!super.isVested(owners[i]), "Cant mint to vested address");
@@ -34,8 +34,8 @@ contract BMTMintable is BMTVested, MinterRole {
         uint256[] memory amounts,
         uint256[] memory vestingEndTimes
     ) public onlyMinter whenNotPaused returns (bool) {
-        require(owners.length == amounts.length, "lenght missmatch 1");
-        require(owners.length == vestingEndTimes.length, "lenght missmatch 2");
+        require(owners.length == amounts.length, "length missmatch 1");
+        require(owners.length == vestingEndTimes.length, "length missmatch 2");
 
         for (uint256 i = 0; i < owners.length; i++) {
             require(!super.isVested(owners[i]), "Cant mint to vested address");
@@ -54,7 +54,7 @@ contract BMTMintable is BMTVested, MinterRole {
         uint256[] memory amounts,
         string memory message
     ) public onlyMinter whenNotPaused returns (bool) {
-        require(owners.length == amounts.length, "lenght missmatch");
+        require(owners.length == amounts.length, "length missmatch");
 
         for (uint256 i = 0; i < owners.length; i++) {
             super._mint(owners[i], amounts[i]);

@@ -11,7 +11,7 @@ contract BVTVotingToken is BVTMintable {
     event VoteFor(uint8 indexed option, uint256 votes);
 
     constructor(bytes memory hashedVotingText, uint8 votingOptions) public {
-        require(votingOptions > 0, "options required    ");
+        require(votingOptions > 0, "options required");
         _hashedVotingText = hashedVotingText;
         _votingOptions = votingOptions;
     }

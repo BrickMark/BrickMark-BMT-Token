@@ -43,4 +43,6 @@ contract("BMTToken Minting test", async accounts => {
         }
     });
 
+
+    
 });
