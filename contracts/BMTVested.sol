@@ -42,7 +42,8 @@ contract BMTVested is BMTFreezable {
     function _addVested(address account, uint256 amount, uint256 endTime)
         internal
     {
-        require(isVested(account) == false, "account already vested");
+        require(isVested(account) == false, "Cant mint to vested address");
+        require(super.balanceOf(account) == 0, "vesting req 0 balance");
         require(endTime >= block.timestamp, "Invalid time");
         require(amount > 0, "amount to vest too small");
         require(

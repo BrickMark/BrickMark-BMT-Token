@@ -38,11 +38,10 @@ contract BMTMintable is BMTVested, MinterRole {
         require(owners.length == vestingEndTimes.length, "length missmatch 2");
 
         for (uint256 i = 0; i < owners.length; i++) {
-            require(!super.isVested(owners[i]), "Cant mint to vested address");
-            require(super.balanceOf(owners[i]) == 0, "vesting req 0 balance");
-
-            super._mint(owners[i], amounts[i]);
+            //require(!super.isVested(owners[i]), "Cant mint to vested address");
+            // require(super.balanceOf(owners[i]) == 0, "vesting req 0 balance");
             super._addVested(owners[i], amounts[i], vestingEndTimes[i]);
+            super._mint(owners[i], amounts[i]);
             emit AccountVested(owners[i], vestingEndTimes[i]);
         }
 

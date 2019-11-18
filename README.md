@@ -15,6 +15,7 @@ Best practice: https://consensys.github.io/smart-contract-best-practices/
 - MultiSig test
 - Event VoteFor test for vote, transfer and transferFrom function
 - Coverage of emitted events in general quiet low
+- Helper Class for time options
 
 ## Requirements
 

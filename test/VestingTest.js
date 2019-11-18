@@ -139,4 +139,43 @@ contract("BMTToken Vesting test", async accounts => {
             "Cant mint to vested address"
         );
     });
+
+    it("MintBatchVested end time in the past", async () => {
+        let instance = await BMTToken.new({ from: BrickMark });
+        let amount = "1000000000000000000";
+
+        let now = Math.trunc(new Date().getTime() / 1000);
+        let lockTime = now - 1;
+        
+        await truffleAssert.reverts(
+            instance.mintBatchVested([alice], [amount], [lockTime]),
+            "Invalid time"
+        );
+    });
+
+    it("MintBatchVested vesting 0 BMT is not allowed", async () => {
+        let instance = await BMTToken.new({ from: BrickMark });
+        let amount = "0";
+
+        let lockTime = Math.trunc(new Date().getTime() / 1000);
+        
+        await truffleAssert.reverts(
+            instance.mintBatchVested([alice], [amount], [lockTime]),
+            "amount to vest too small"
+        );
+    });
+
+    it("MintBatchVested end time exceeds max vesting duration", async () => {
+        let instance = await BMTToken.new({ from: BrickMark });
+        let amount = "1000000000000000000";
+
+        let now = Math.trunc(new Date().getTime() / 1000);
+        let dayInSeconds = 60 * 60 * 24;
+        let lockTime = now + (1095 * dayInSeconds);
+        
+        await truffleAssert.reverts(
+            instance.mintBatchVested([alice], [amount], [lockTime]),
+            "exceeds duration"
+        );
+    });
 });
