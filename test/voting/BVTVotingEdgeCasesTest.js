@@ -1,8 +1,8 @@
 const helper = require("ganache-time-traveler");
+const truffleAssert = require("truffle-assertions");
 const BVTToken = artifacts.require("./BVTVotingToken.sol");
 
 contract("BVT VotingEdgeCases test", async accounts => {
-
     const SECONDS_IN_DAY = 86400;
 
     const BrickMark = accounts[0];
@@ -25,23 +25,17 @@ contract("BVT VotingEdgeCases test", async accounts => {
 
         await instance.mintBatch([alice], [amount]);
 
-        try {
-            await instance.transfer(
-                "0x0000000000000000000000000000000000000001",
-                amount,
-                { from: alice }
-            );
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "BVTState: not voting state");
-        }
+        await truffleAssert.reverts(
+            instance.transfer("0x0000000000000000000000000000000000000001", amount, {
+                from: alice
+            }),
+            "BVTState: not voting state"
+        );
 
-        try {
-            await instance.vote(1, { from: alice });
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "BVTState: not voting state");
-        }
+        await truffleAssert.reverts(
+            instance.vote(1, { from: alice }),
+            "BVTState: not voting state"
+        );
     });
 
     it("BVT Voting: When end state should fail", async () => {
@@ -60,23 +54,16 @@ contract("BVT VotingEdgeCases test", async accounts => {
         state = await instance.getState.call();
         assert.equal(state.toString(), "2");
 
-        try {
-            await instance.transfer(
+        await truffleAssert.reverts(
+            instance.transfer(
                 "0x0000000000000000000000000000000000000001",
                 amount,
                 { from: alice }
-            );
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "BVTState: not voting state");
-        }
+            ),
+            "BVTState: not voting state"
+        );
 
-        try {
-            await instance.vote(1, { from: alice });
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "BVTState: not voting state");
-        }
+        await truffleAssert.reverts(instance.vote(1, { from: alice }), "BVTState: not voting state");
     });
 
     it("BVT Voting: Start voting with invalid time", async () => {
@@ -85,11 +72,6 @@ contract("BVT VotingEdgeCases test", async accounts => {
 
         await instance.mintBatch([alice], [amount]);
 
-        try {
-            await instance.startVoting(1234);
-            assert.fail("VM Exception expected");
-        } catch (ex) {
-            assert.equal(ex.reason, "End time not in future");
-        }
+        await truffleAssert.reverts(instance.startVoting(1234), "End time not in future");
     });
 });
