@@ -7,9 +7,9 @@ Best practice: https://consensys.github.io/smart-contract-best-practices/
 ## Qestions to clarify
 
 - Writeable functions such as update roles are still active in state freeze and paused. What todo?
+- How long is a voting? What's the max duration? 100 days
 
 **Voting questions and todos**
-- Protect start vote option
 - impl. self destruct
 - impl. testing
 - remove standard mint function
