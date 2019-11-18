@@ -1,3 +1,4 @@
+const truffleAssert = require('truffle-assertions');
 const BMTToken = artifacts.require("./BMTToken.sol");
 
 contract("BMTToken PayDividendTest test", async accounts => {
@@ -7,7 +8,7 @@ contract("BMTToken PayDividendTest test", async accounts => {
     const bob = accounts[6];
     const carol = accounts[7];
 
-    it("PayDividend 1", async () => {
+    it("PayDividend - happy case", async () => {
         let instance = await BMTToken.new({from: BrickMark});
         let recipients = [alice, bob, carol];
         let amounts = ["1000000000000000000", "2000000000000000000", "3000000000000000000"]
@@ -29,7 +30,17 @@ contract("BMTToken PayDividendTest test", async accounts => {
             assert.equal(event2.args.account, recipients[i]);
             assert.equal(event2.args.amount, amounts[i]);
             assert.equal(event2.args.message, "First Dividend");
-
         }
+    });
+
+    it("PayDividend - length missmatch", async () => {
+        let instance = await BMTToken.new({from: BrickMark});
+        let recipients = [alice, bob, carol];
+        let amounts = ["1000000000000000000", "2000000000000000000"]
+        
+        await truffleAssert.reverts(
+            instance.payDividend(recipients, amounts, "First Dividend"),
+            "length missmatch"
+        );
     });
 });

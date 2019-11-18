@@ -4,7 +4,7 @@ BrickMark smart contracts.
 
 Best practice: https://consensys.github.io/smart-contract-best-practices/
 
-## Qestions to clarify
+## Questions to clarify
 
 - Writeable functions such as update roles are still active in state freeze and paused. What todo?
 - How long is a voting? What's the max duration? 100 days
@@ -59,3 +59,7 @@ Checkout `truffle-config.js`
 # Set your private key in the 'truffle-config.js' file
 truffle deploy --network rinkeby
 ```
+
+## Testing
+
+Using https://www.npmjs.com/package/truffle-assertions
