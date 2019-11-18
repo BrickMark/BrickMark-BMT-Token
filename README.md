@@ -14,6 +14,7 @@ Best practice: https://consensys.github.io/smart-contract-best-practices/
 - All state changes should emit an event
 - MultiSig test
 - Event VoteFor test for vote, transfer and transferFrom function
+- Coverage of emitted events in general quiet low
 
 ## Requirements
 

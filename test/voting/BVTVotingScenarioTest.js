@@ -41,9 +41,10 @@ contract("BVT Voting Scenario test", async accounts => {
         let now = Math.trunc(new Date().getTime() / 1000);
         let endTime = now + SECONDS_IN_DAY;
         let result = await instance.startVoting(endTime);
-        let event = result.receipt.logs[0];
-        assert.equal(event.event, "VotingStarted");
-        assert.equal(event.args.endTime, endTime);
+
+        truffleAssert.eventEmitted(result, 'VotingStarted', (ev) => {
+            return ev.endTime.toString() === endTime.toString();
+        });
 
         state = await instance.getState.call();
         assert.equal(state, 1);

@@ -100,7 +100,6 @@ contract("BMTToken PauseAndFreeze test", async accounts => {
         await instance.pause();
         await instance.freeze();
 
-
         await truffleAssert.reverts(
             instance.mintBatch([alice], [amount]),
             "Pausable: paused"
