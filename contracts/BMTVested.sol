@@ -4,7 +4,7 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "./BMTFreezable.sol";
 
 contract BMTVested is BMTFreezable {
-    uint256 private _maxVestingDuration = 1095 days; //3 years: 3 * 365
+    uint256 private constant _MAX_VESTING_DURATION = 1095 days; //3 years: 3 * 365
     //address is the vested tokenholder
     //uint256 is the unixtime (epoche in seconds) the tokens are vested
     mapping(address => uint256) private _vestedEndTimeMap;
@@ -47,7 +47,7 @@ contract BMTVested is BMTFreezable {
         require(endTime >= block.timestamp, "Invalid time");
         require(amount > 0, "amount to vest too small");
         require(
-            endTime < block.timestamp + _maxVestingDuration,
+            endTime < block.timestamp + _MAX_VESTING_DURATION,
             "exceeds duration"
         );
 

@@ -86,7 +86,7 @@ contract("BVT Edge-Cases test", async accounts => {
         await instance.mintBatch([alice], [amount]);
 
         let now = Math.trunc(new Date().getTime() / 1000);
-        let endTime = now + SECONDS_IN_DAY * 100;
+        let endTime = now + (SECONDS_IN_DAY * 6 * 31);
 
         await truffleAssert.reverts(
             instance.startVoting(endTime),

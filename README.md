@@ -10,12 +10,15 @@ Best practice: https://consensys.github.io/smart-contract-best-practices/
 - How long is a voting? What's the max duration? 100 days
 
 **Voting questions and todos**
-- voting: adding out of range tests
 - All state changes should emit an event
 - MultiSig test
 - Event VoteFor test for vote, transfer and transferFrom function
 - Coverage of emitted events in general quiet low
 - Helper Class for time options
+- Deployment to Rinkeby
+- Test Frontend
+- End2End Test Scenario with Gnosis MultiSig
+
 
 ## Requirements
 
