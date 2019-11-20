@@ -1,5 +1,6 @@
 const truffleAssert = require('truffle-assertions');
 const BMTToken = artifacts.require("./BMTToken.sol");
+const time = require("./TimeUtil");
 
 contract("BMTToken PauseAndFreeze test", async accounts => {
 
@@ -8,7 +9,7 @@ contract("BMTToken PauseAndFreeze test", async accounts => {
     const bob = accounts[6];
     const carol = accounts[7];
 
-    it("Pause and unpause 1", async () => {
+    it("Paused - Pause and unpause 1", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000"
 
@@ -25,7 +26,7 @@ contract("BMTToken PauseAndFreeze test", async accounts => {
         await instance.transfer(bob, amount, { from: alice });
     });
 
-    it("Pause and freeze 1", async () => {
+    it("Paused - Pause and freeze 1", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000"
 
@@ -74,9 +75,8 @@ contract("BMTToken PauseAndFreeze test", async accounts => {
         await instance.pause();
         await instance.freeze();
 
-        let now = Math.trunc(new Date().getTime() / 1000);
         await truffleAssert.reverts(
-            instance.mintBatchVested([alice], [amount], [now + 3600]),
+            instance.mintBatchVested([alice], [amount], [time.unixTimeTomorrow()]),
             "Pausable: paused"
         );
     });
@@ -113,9 +113,8 @@ contract("BMTToken PauseAndFreeze test", async accounts => {
         await instance.pause();
         await instance.freeze();
 
-        let now = Math.trunc(new Date().getTime() / 1000);
         await truffleAssert.reverts(
-            instance.mintBatchVested([alice], [amount], [now + 3600]),
+            instance.mintBatchVested([alice], [amount], [time.unixTimeTomorrow()]),
             "Pausable: paused"
         );
     });

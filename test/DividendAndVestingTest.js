@@ -1,5 +1,5 @@
 const BMTToken = artifacts.require("./BMTToken.sol");
-const time = require("./TimeUtil")
+const time = require("./TimeUtil");
 
 contract("BMTToken DividendAndVestingTest test", async accounts => {
 

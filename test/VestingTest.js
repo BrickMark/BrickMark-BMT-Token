@@ -1,6 +1,7 @@
 const helper = require('ganache-time-traveler');
 const truffleAssert = require('truffle-assertions');
 const BMTToken = artifacts.require("./BMTToken.sol");
+const time = require("./TimeUtil");
 
 contract("BMTToken Vesting test", async accounts => {
 
@@ -8,8 +9,6 @@ contract("BMTToken Vesting test", async accounts => {
     const alice = accounts[5];
     const bob = accounts[6];
     const carol = accounts[7];
-
-    const SECONDS_IN_DAY = 86400;
 
     beforeEach(async () => {
         let snapShot = await helper.takeSnapshot();
@@ -25,10 +24,7 @@ contract("BMTToken Vesting test", async accounts => {
         let recipients = [alice];
         let amounts = ["1000000000000000000"]
 
-        let now = Math.trunc(new Date().getTime() / 1000);
-        let lockTimes = [now + SECONDS_IN_DAY]
-
-        await instance.mintBatchVested(recipients, amounts, lockTimes);
+        await instance.mintBatchVested(recipients, amounts, [time.unixTimeTomorrow()]);
         let vestedAmount = await instance.vestedAmount.call(recipients[0]);
         assert.equal(vestedAmount.toString(), amounts[0]);
 
@@ -37,10 +33,10 @@ contract("BMTToken Vesting test", async accounts => {
             "Tokens vested"
         );
 
-        await helper.advanceTimeAndBlock(SECONDS_IN_DAY);
+        await helper.advanceTimeAndBlock(time.ONE_DAY_IN_SECONDS);
 
         vestedAmount = await instance.vestedAmount.call(recipients[0]);
-        assert.equal(vestedAmount, 0);
+        assert.equal(vestedAmount.toString(), "0");
 
         await instance.transfer(bob, amounts[0], { from: alice });
 
@@ -56,17 +52,14 @@ contract("BMTToken Vesting test", async accounts => {
         let recipients = [alice];
         let amounts = ["1000000000000000000"]
 
-        let now = Math.trunc(new Date().getTime() / 1000);
-        let lockTimes = [now + SECONDS_IN_DAY]
-
-        await instance.mintBatchVested(recipients, amounts, lockTimes);
+        await instance.mintBatchVested(recipients, amounts, [time.unixTimeTomorrow()]);
 
         await truffleAssert.reverts(
             instance.transfer(bob, amounts[0], { from: alice }),
             "Tokens vested"
         );
 
-        await helper.advanceTimeAndBlock(SECONDS_IN_DAY);
+        await helper.advanceTimeAndBlock(time.ONE_DAY_IN_SECONDS);
         await instance.transfer(bob, amounts[0], { from: alice });
 
         var balance = await instance.balanceOf.call(alice);
@@ -78,16 +71,13 @@ contract("BMTToken Vesting test", async accounts => {
 
     it("Transfer tokens to vested recipient should fail", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
-        let amounts = ["1000000000000000000"]
+        let amount = "1000000000000000000";
 
-        let now = Math.trunc(new Date().getTime() / 1000);
-        let dayInSeconds = 60 * 60 * 24;
-        let lockTimes = [now + dayInSeconds]
-        await instance.mintBatch([bob], amounts);
-        await instance.mintBatchVested([alice], amounts, lockTimes);
+        await instance.mintBatch([bob], [amount]);
+        await instance.mintBatchVested([alice], [amount], [time.unixTimeTomorrow()]);
 
         await truffleAssert.reverts(
-            instance.transfer(alice, amounts[0], { from: bob }),
+            instance.transfer(alice, amount, { from: bob }),
             "Vested recipient"
         );
     });
@@ -96,14 +86,10 @@ contract("BMTToken Vesting test", async accounts => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000";
 
-        let now = Math.trunc(new Date().getTime() / 1000);
-        let dayInSeconds = 60 * 60 * 24;
-        let lockTime = now + dayInSeconds
-
         await instance.mintBatch([alice], [amount]);
         
         await truffleAssert.reverts(
-            instance.mintBatchVested([alice], [amount], [lockTime]),
+            instance.mintBatchVested([alice], [amount], [time.unixTimeTomorrow()]),
             "vesting req 0 balance"
         );
     });
@@ -112,11 +98,7 @@ contract("BMTToken Vesting test", async accounts => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000";
 
-        let now = Math.trunc(new Date().getTime() / 1000);
-        let dayInSeconds = 60 * 60 * 24;
-        let lockTime = now + dayInSeconds
-
-        await instance.mintBatchVested([alice], [amount], [lockTime]);
+        await instance.mintBatchVested([alice], [amount], [time.unixTimeTomorrow()]);
         
         await truffleAssert.reverts(
             instance.mintBatch([alice], [amount]),
@@ -128,11 +110,7 @@ contract("BMTToken Vesting test", async accounts => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000";
 
-        let now = Math.trunc(new Date().getTime() / 1000);
-        let dayInSeconds = 60 * 60 * 24;
-        let lockTime = now + dayInSeconds
-
-        await instance.mintBatchVested([alice], [amount], [lockTime]);
+        await instance.mintBatchVested([alice], [amount], [time.unixTimeTomorrow()]);
         
         await truffleAssert.reverts(
             instance.mintBatch([alice], [amount]),
@@ -144,11 +122,8 @@ contract("BMTToken Vesting test", async accounts => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000";
 
-        let now = Math.trunc(new Date().getTime() / 1000);
-        let lockTime = now - 1;
-        
         await truffleAssert.reverts(
-            instance.mintBatchVested([alice], [amount], [lockTime]),
+            instance.mintBatchVested([alice], [amount], [time.unixTimeNow() - 1]),
             "Invalid time"
         );
     });
@@ -157,10 +132,8 @@ contract("BMTToken Vesting test", async accounts => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "0";
 
-        let lockTime = Math.trunc(new Date().getTime() / 1000);
-        
         await truffleAssert.reverts(
-            instance.mintBatchVested([alice], [amount], [lockTime]),
+            instance.mintBatchVested([alice], [amount], [time.unixTimeNow()]),
             "amount to vest too small"
         );
     });
@@ -169,12 +142,8 @@ contract("BMTToken Vesting test", async accounts => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000";
 
-        let now = Math.trunc(new Date().getTime() / 1000);
-        let dayInSeconds = 60 * 60 * 24;
-        let lockTime = now + (1095 * dayInSeconds);
-        
         await truffleAssert.reverts(
-            instance.mintBatchVested([alice], [amount], [lockTime]),
+            instance.mintBatchVested([alice], [amount], [time.unixTimeInDays(1095)]),
             "exceeds duration"
         );
     });
