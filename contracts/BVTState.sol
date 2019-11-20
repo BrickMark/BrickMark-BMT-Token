@@ -5,7 +5,6 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 
 contract BVTState is ERC20, ERC20Detailed, MinterRole {
-
     enum State {init, voting, end}
 
     uint256 private constant _MAX_VOTING_DURATION = 186 days; //6 months. 6*31
