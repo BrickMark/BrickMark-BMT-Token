@@ -1,8 +1,7 @@
 const BMTToken = artifacts.require("./BMTToken.sol");
+const time = require("./TimeUtil")
 
 contract("BMTToken DividendAndVestingTest test", async accounts => {
-
-    const SECONDS_IN_DAY = 86400;
 
     const BrickMark = accounts[0];
     const alice = accounts[5];
@@ -13,10 +12,7 @@ contract("BMTToken DividendAndVestingTest test", async accounts => {
         let instance = await BMTToken.new({from: BrickMark});
         let amount = "1000000000000000000";
         
-        let now = Math.trunc(new Date().getTime() / 1000);
-        let lockTime = now + SECONDS_IN_DAY;
-
-        await instance.mintBatchVested([alice], [amount], [lockTime]);
+        await instance.mintBatchVested([alice], [amount], [time.unixTimeTomorrow()]);
         
         let spendable = await instance.spendableAmount.call(alice);
         let balance = await instance.balanceOf.call(alice);

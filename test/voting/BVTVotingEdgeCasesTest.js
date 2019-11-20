@@ -1,9 +1,9 @@
 const helper = require("ganache-time-traveler");
 const truffleAssert = require("truffle-assertions");
 const BVTToken = artifacts.require("./BVTVotingToken.sol");
+const time = require("../TimeUtil");
 
 contract("BVT Edge-Cases test", async accounts => {
-    const SECONDS_IN_DAY = 86400;
 
     const BrickMark = accounts[0];
     const alice = accounts[5];
@@ -44,13 +44,10 @@ contract("BVT Edge-Cases test", async accounts => {
 
         await instance.mintBatch([alice], [amount]);
 
-        // start voting
-        let now = Math.trunc(new Date().getTime() / 1000);
-        let endTime = now + SECONDS_IN_DAY;
-        await instance.startVoting(endTime);
+        await instance.startVoting(time.unixTimeTomorrow());
 
         // Jump to end state
-        await helper.advanceTimeAndBlock(SECONDS_IN_DAY);
+        await helper.advanceTimeAndBlock(time.ONE_DAY_IN_SECONDS);
         state = await instance.getState.call();
         assert.equal(state.toString(), "2");
 
@@ -85,24 +82,17 @@ contract("BVT Edge-Cases test", async accounts => {
 
         await instance.mintBatch([alice], [amount]);
 
-        let now = Math.trunc(new Date().getTime() / 1000);
-        let endTime = now + (SECONDS_IN_DAY * 6 * 31);
-
         await truffleAssert.reverts(
-            instance.startVoting(endTime),
+            instance.startVoting(time.unixTimeInDays(6 * 31)),
             "Too long"
         );
     });
 
     it("Edge-Cases - Start voting without minting", async () => {
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
-        let amount = "1000000000000000000";
-
-        let now = Math.trunc(new Date().getTime() / 1000);
-        let endTime = now + SECONDS_IN_DAY;
 
         await truffleAssert.reverts(
-            instance.startVoting(endTime),
+            instance.startVoting(time.unixTimeTomorrow()),
             "No voting tokens"
         );
     });
@@ -120,10 +110,7 @@ contract("BVT Edge-Cases test", async accounts => {
         let amount = "2000000000000000000";
         await instance.mintBatch([bob], [amount]);
 
-        // start voting
-        let now = Math.trunc(new Date().getTime() / 1000);
-        let endTime = now + SECONDS_IN_DAY;
-        await instance.startVoting(endTime);
+        await instance.startVoting(time.unixTimeTomorrow());
 
         await truffleAssert.reverts(
             instance.vote(0, { from: bob }),
@@ -137,10 +124,7 @@ contract("BVT Edge-Cases test", async accounts => {
         let amount = "2000000000000000000";
         await instance.mintBatch([bob], [amount]);
 
-        // start voting
-        let now = Math.trunc(new Date().getTime() / 1000);
-        let endTime = now + SECONDS_IN_DAY;
-        await instance.startVoting(endTime);
+        await instance.startVoting(time.unixTimeTomorrow());
 
         await truffleAssert.reverts(
             instance.vote(4, { from: bob }),

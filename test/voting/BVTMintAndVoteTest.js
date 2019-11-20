@@ -1,10 +1,9 @@
 const helper = require("ganache-time-traveler");
 const truffleAssert = require('truffle-assertions');
 const BVTToken = artifacts.require("./BVTVotingToken.sol");
+const time = require("../TimeUtil");
 
 contract("BVT - Mint and Vote test", async accounts => {
-
-    const SECONDS_IN_DAY = 86400;
 
     const BrickMark = accounts[0];
     const alice = accounts[5];
@@ -60,10 +59,7 @@ contract("BVT - Mint and Vote test", async accounts => {
 
         await instance.mintBatch(recipients, amounts);
 
-        // start voting
-        let now = Math.trunc(new Date().getTime() / 1000);
-        let endTime = now + SECONDS_IN_DAY;
-        await instance.startVoting(endTime);
+        await instance.startVoting(time.unixTimeTomorrow());
 
         await instance.transfer("0x0000000000000000000000000000000000000001", amounts[0], { from: recipients[0] });
 
@@ -80,10 +76,7 @@ contract("BVT - Mint and Vote test", async accounts => {
         let amount = "2000000000000000000";
         await instance.mintBatch([bob], [amount]);
 
-        // start voting
-        let now = Math.trunc(new Date().getTime() / 1000);
-        let endTime = now + SECONDS_IN_DAY;
-        await instance.startVoting(endTime);
+        await instance.startVoting(time.unixTimeTomorrow());
 
         await instance.approve(alice, amount, { from: bob });
         await instance.transferFrom(bob, "0x0000000000000000000000000000000000000001", amount, { from: alice });
@@ -101,10 +94,7 @@ contract("BVT - Mint and Vote test", async accounts => {
         let amount = "2000000000000000000";
         await instance.mintBatch([bob], [amount]);
 
-        // start voting
-        let now = Math.trunc(new Date().getTime() / 1000);
-        let endTime = now + SECONDS_IN_DAY;
-        await instance.startVoting(endTime);
+        await instance.startVoting(time.unixTimeTomorrow());
 
         await instance.vote(1, { from: bob });
 

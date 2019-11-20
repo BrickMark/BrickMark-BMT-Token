@@ -1,9 +1,9 @@
 const helper = require("ganache-time-traveler");
 const truffleAssert = require('truffle-assertions');
 const BVTToken = artifacts.require("./BVTVotingToken.sol");
+const time = require("../TimeUtil");
 
 contract("BVT abortVoting test", async accounts => {
-    const SECONDS_IN_DAY = 86400;
 
     const BrickMark = accounts[0];
     const alice = accounts[5];
@@ -38,10 +38,7 @@ contract("BVT abortVoting test", async accounts => {
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
 
         await instance.mintBatch([alice], [1]);
-
-        let now = Math.trunc(new Date().getTime() / 1000);
-        let endTime = now + SECONDS_IN_DAY;
-        await instance.startVoting(endTime);
+        await instance.startVoting(time.unixTimeTomorrow());
 
         await truffleAssert.reverts(
             instance.abortVoting({ from: alice }),
@@ -55,12 +52,10 @@ contract("BVT abortVoting test", async accounts => {
         await instance.mintBatch([alice], [1]);
         
         // start voting
-        let now = Math.trunc(new Date().getTime() / 1000);
-        let endTime = now + SECONDS_IN_DAY;
-        await instance.startVoting(endTime);
+        await instance.startVoting(time.unixTimeTomorrow());
 
         // Jump to end state
-        await helper.advanceTimeAndBlock(SECONDS_IN_DAY);
+        await helper.advanceTimeAndBlock(time.ONE_DAY_IN_SECONDS);
         state = await instance.getState.call();
         assert.equal(state, 2);
 
