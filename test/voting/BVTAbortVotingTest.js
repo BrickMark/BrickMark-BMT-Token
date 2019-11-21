@@ -17,7 +17,7 @@ contract("BVT abortVoting test", async accounts => {
         await helper.revertToSnapshot(snapshotId);
     });
 
-    it("abortVoting: Init state abort", async () => {
+    it("abortVoting - Init state abort", async () => {
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
         await instance.name.call();
         await instance.abortVoting();
@@ -25,7 +25,7 @@ contract("BVT abortVoting test", async accounts => {
         await truffleAssert.fails(instance.name.call(), "Returned values aren't valid, did it run Out of Gas?");
     });
 
-    it("abortVoting: Init state not minter tries to abort. Fail", async () => {
+    it("abortVoting - Init state not minter tries to abort. Fail", async () => {
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
 
         await truffleAssert.reverts(
@@ -34,7 +34,7 @@ contract("BVT abortVoting test", async accounts => {
         );
     });
 
-    it("abortVoting: Voting state abort should fail", async () => {
+    it("abortVoting - Voting state abort should fail", async () => {
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
 
         await instance.mintBatch([alice], [1]);
@@ -46,7 +46,7 @@ contract("BVT abortVoting test", async accounts => {
         );
     });
 
-    it("abortVoting: End state abort should fail", async () => {
+    it("abortVoting - End state abort should fail", async () => {
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
 
         await instance.mintBatch([alice], [1]);

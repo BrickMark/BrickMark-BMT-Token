@@ -22,27 +22,6 @@ contract("BMTToken Minting test", async accounts => {
         }
     });
 
-    it("mintBatchVested - happy case", async () => {
-        let instance = await BMTToken.new({ from: BrickMark });
-        let recipients = [alice, bob, carol];
-        let amounts = ["1000000000000000000", "2000000000000000000", "3000000000000000000"]
-
-        let lockTimes = [time.unixTimeTomorrow(), time.unixTimeInDays(2), time.unixTimeInDays(3)];
-
-        await instance.mintBatchVested(recipients, amounts, lockTimes);
-
-        for (var i = 0; i < recipients.length; i++) {
-            var balance = await instance.balanceOf.call(recipients[i]);
-            assert.equal(balance.toString(), amounts[i]);
-
-            var isVested = await instance.isVested.call(recipients[i]);
-            assert.equal(isVested, true);
-
-            var lockTime = await instance.vestingEndTime.call(recipients[i]);
-            assert.equal(lockTime, lockTimes[i]);
-        }
-    });
-
     it("mintBatch - length missmatch", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let recipients = [alice, bob, carol];
@@ -65,6 +44,27 @@ contract("BMTToken Minting test", async accounts => {
             instance.mintBatch(recipients, amounts),
             "Cant mint to vested address"
         );
+    });
+
+    it("mintBatchVested - happy case", async () => {
+        let instance = await BMTToken.new({ from: BrickMark });
+        let recipients = [alice, bob, carol];
+        let amounts = ["1000000000000000000", "2000000000000000000", "3000000000000000000"]
+
+        let lockTimes = [time.unixTimeTomorrow(), time.unixTimeInDays(2), time.unixTimeInDays(3)];
+
+        await instance.mintBatchVested(recipients, amounts, lockTimes);
+
+        for (var i = 0; i < recipients.length; i++) {
+            var balance = await instance.balanceOf.call(recipients[i]);
+            assert.equal(balance.toString(), amounts[i]);
+
+            var isVested = await instance.isVested.call(recipients[i]);
+            assert.equal(isVested, true);
+
+            var lockTime = await instance.vestingEndTime.call(recipients[i]);
+            assert.equal(lockTime, lockTimes[i]);
+        }
     });
 
     it("mintBatchVested - length missmatch 1", async () => {

@@ -8,7 +8,7 @@ contract("BMTToken DividendAndVestingTest test", async accounts => {
     const bob = accounts[6];
     const carol = accounts[7];
 
-    it("Mint Vested, Pay Dividend, spend dividend", async () => {
+    it("Mint Vested - Pay Dividend, spend dividend", async () => {
         let instance = await BMTToken.new({from: BrickMark});
         let amount = "1000000000000000000";
         

@@ -1,4 +1,4 @@
-pragma solidity ^0.5.8;
+pragma solidity ^0.5.12;
 
 //actually this contract is only needed that "npm run coverage" is working
 contract Migrations {

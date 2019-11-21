@@ -19,7 +19,7 @@ contract("BMTToken Vesting test", async accounts => {
         await helper.revertToSnapshot(snapshotId);
     });
 
-    it("Vested Transfer Exception Test", async () => {
+    it("Vested - Vested tokens cant transfer", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let recipients = [alice];
         let amounts = ["1000000000000000000"]
@@ -47,7 +47,7 @@ contract("BMTToken Vesting test", async accounts => {
         assert.equal(balance.toString(), amounts[0])
     });
 
-    it("Vested Account can not transfer tokens", async () => {
+    it("Vested - Account can not transfer tokens", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let recipients = [alice];
         let amounts = ["1000000000000000000"]
@@ -69,7 +69,7 @@ contract("BMTToken Vesting test", async accounts => {
         assert.equal(balance.toString(), amounts[0])
     });
 
-    it("Transfer tokens to vested recipient should fail", async () => {
+    it("Vested - Transfer tokens to vested recipient should fail", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000";
 
@@ -82,7 +82,7 @@ contract("BMTToken Vesting test", async accounts => {
         );
     });
 
-    it("MintBatchVested to an address with a balance should fail", async () => {
+    it("Vested - MintBatchVested to an address with a balance should fail", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000";
 
@@ -94,7 +94,7 @@ contract("BMTToken Vesting test", async accounts => {
         );
     });
 
-    it("MintBatchVested to Vested address should fail", async () => {
+    it("Vested - MintBatchVested to Vested address should fail", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000";
 
@@ -106,7 +106,7 @@ contract("BMTToken Vesting test", async accounts => {
         );
     });
 
-    it("MintBatch to Vested address should fail", async () => {
+    it("Vested - MintBatch to Vested address should fail", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000";
 
@@ -118,7 +118,7 @@ contract("BMTToken Vesting test", async accounts => {
         );
     });
 
-    it("MintBatchVested end time in the past", async () => {
+    it("Vested - MintBatchVested end time in the past", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000";
 
@@ -128,7 +128,7 @@ contract("BMTToken Vesting test", async accounts => {
         );
     });
 
-    it("MintBatchVested vesting 0 BMT is not allowed", async () => {
+    it("Vested - MintBatchVested vesting 0 BMT is not allowed", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "0";
 
@@ -138,7 +138,7 @@ contract("BMTToken Vesting test", async accounts => {
         );
     });
 
-    it("MintBatchVested end time exceeds max vesting duration", async () => {
+    it("Vested - MintBatchVested end time exceeds max vesting duration", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let amount = "1000000000000000000";
 

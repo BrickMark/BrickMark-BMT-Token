@@ -19,7 +19,7 @@ contract("BVT Voting Scenario test", async accounts => {
         await helper.revertToSnapshot(snapshotId);
     });
 
-    it("Voting Scenario 1", async () => {
+    it("Voting - Scenario 1", async () => {
 
         // Deploy Voting contract
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
