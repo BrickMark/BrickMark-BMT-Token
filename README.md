@@ -28,6 +28,21 @@ Following tools are required:
 
 The first time you checkout the project run a `npm install`.
 
+### Security scan
+
+We are using MythX for security scans: https://docs.mythx.io/en/latest/tools/truffle/
+
+`npm run security`
+
+```bash
+# Create a file mythx-accounts.sh
+
+#!/bin/bash
+
+export MYTHX_ETH_ADDRESS='<ETH ADDRESS>'
+export MYTHX_PASSWORD='<PASSWORD>'
+```
+
 ## Smart Contract
 
 It's a truffle project managed with npm. Have a look at `package.json` to see the supported commands.

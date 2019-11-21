@@ -5,6 +5,9 @@ var rinkebyEndpoint = "https://rinkeby.infura.io/v3/0cd25f13fa42452181039a22154c
 
 
 module.exports = {
+
+  plugins: ["truffle-security"],
+
   networks: {
     development: {
       host: "localhost",
@@ -19,6 +22,7 @@ module.exports = {
     },
   },
   solc: {
+    version: "0.5.12",
     optimizer: {
       enabled: true,
       runs: 200
