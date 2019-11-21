@@ -38,7 +38,6 @@ We are using MythX for security scans: https://docs.mythx.io/en/latest/tools/tru
 # Create a file mythx-accounts.sh
 
 #!/bin/bash
-
 export MYTHX_ETH_ADDRESS='<ETH ADDRESS>'
 export MYTHX_PASSWORD='<PASSWORD>'
 ```

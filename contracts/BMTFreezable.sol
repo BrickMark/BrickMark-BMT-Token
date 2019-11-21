@@ -5,7 +5,7 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20Pausable.sol";
 contract BMTFreezable is ERC20Pausable {
     bool private _frozen;
 
-    event Frozen(address indexed sender);
+    event Frozen(address account);
 
     constructor() internal ERC20Pausable() {
         _frozen = false;
