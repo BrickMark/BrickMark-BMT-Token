@@ -32,6 +32,8 @@ contract BVTState is ERC20, ERC20Detailed, MinterRole {
     //     _;
     // }
 
+    /// @notice Get the current state of the voting smart contract
+    /// @param return 0: init-state, 1: voting-state, 2: end-state
     function getState() public view returns (State) {
         if (_endTime == 0) {
             return State.init;
@@ -42,14 +44,22 @@ contract BVTState is ERC20, ERC20Detailed, MinterRole {
         }
     }
 
+    /// @notice Get the start time. Unix timestamp in seconds. Only set when state is NOT init
+    /// @param return 0: Voting not yet started. return > 0: Unix Timestamp in seconds when the vote started
     function getStartTime() public view returns (uint256) {
         return _startTime;
     }
 
+    /// @notice Get the end time when the voting ends (or ended). Unix timestamp in seconds. Only set when state is
+    ///         NOT init
+    /// @param return 0: Voting not yet started. return > 0: Unix Timestamp in seconds when the vote ends
     function getEndTime() public view returns (uint256) {
         return _endTime;
     }
 
+    /// @notice Starts the voting. Minter Role.
+    /// @param endTime The unix timestamp in seconds. At that time the voting will end.
+    /// @param return true if successful
     function startVoting(uint256 endTime)
         public
         whenInit
@@ -67,6 +77,9 @@ contract BVTState is ERC20, ERC20Detailed, MinterRole {
         return true;
     }
 
+    /// @notice Aborts the voting. Minter Role. Voting can only be aborted  in init state. This will self destruct the
+    ///         voting smart contract
+    /// @param return true if successful
     function abortVoting() public whenInit onlyMinter returns (bool) {
         selfdestruct(msg.sender);
     }

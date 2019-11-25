@@ -7,13 +7,9 @@ Best practice: https://consensys.github.io/smart-contract-best-practices/
 ## Questions to clarify
 
 - Writeable functions such as update roles are still active in state freeze and paused. What todo?
-- How long is a voting? What's the max duration? 100 days
 
 **todos**
-- All state changes should emit an event
 - MultiSig test
-- Event VoteFor test for vote, transfer and transferFrom function
-- Coverage of emitted events in general quiet low
 - Deployment to Rinkeby
 - Test Frontend
 - End2End Test Scenario with Gnosis MultiSig
@@ -26,7 +22,7 @@ Following tools are required:
 - NPM
 - Ganache-cli
 
-The first time you checkout the project run a `npm install`.
+The first time you checkout the project run a `npm install`. To use all functionalities have a look into the `package.json` file. Several tools are globally installed.  
 
 ### Security scan
 

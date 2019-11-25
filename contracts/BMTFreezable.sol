@@ -11,6 +11,8 @@ contract BMTFreezable is ERC20Pausable {
         _frozen = false;
     }
 
+    /// @notice Checks if the smart contract is frozen.
+    /// @param return true if frozen
     function isFrozen() public view returns (bool) {
         return _frozen;
     }
@@ -20,10 +22,18 @@ contract BMTFreezable is ERC20Pausable {
         _;
     }
 
-    // Freeze is only possible when already paused
-    function freeze() public onlyPauser whenPaused whenNotFrozen {
+    /// @notice Freeze this contract. Has to be paused in advance. Protected by the pauser role
+    /// @param return true when freeze succeed.
+    function freeze()
+        public
+        onlyPauser
+        whenPaused
+        whenNotFrozen
+        returns (bool)
+    {
         _frozen = true;
         emit Frozen(_msgSender());
+        return true;
     }
 
     function unpause() public onlyPauser whenPaused whenNotFrozen {
