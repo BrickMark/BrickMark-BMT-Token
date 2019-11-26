@@ -8,7 +8,7 @@ contract BVTMintable is BVTState {
     /// @notice Mints new BMT tokens. Only minters can call this function
     /// @param owners An array of recipients of the new generated tokens
     /// @param amounts A corresponding array of amounts to be assigned to the owners
-    /// @param return true if successful
+    /// @return true if successful
     function mintBatch(address[] memory owners, uint256[] memory amounts)
         public
         whenInit

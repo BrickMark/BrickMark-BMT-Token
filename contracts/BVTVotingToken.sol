@@ -27,20 +27,20 @@ contract BVTVotingToken is BVTMintable {
     }
 
     /// @notice Returns the possible voting options
-    /// @param return Number of possible voting options
+    /// @return Number of possible voting options
     function getVotingOptions() public view returns (uint256) {
         return _votingOptions;
     }
 
     /// @notice Returns the hash of the voting/ballot text
-    /// @param return hash
+    /// @return hash
     function getHashedVotingText() public view returns (bytes memory) {
         return _hashedVotingText;
     }
 
     /// @notice Returns the amounts of votes for a given option
     /// @param votingOption The option to calculate the votes for
-    /// @param return The actual amount of votes for the given option
+    /// @return The actual amount of votes for the given option
     function getVotesFor(uint8 votingOption)
         public
         view
@@ -53,7 +53,7 @@ contract BVTVotingToken is BVTMintable {
 
     /// @notice Votes for a specific option. All token of the voter will be transfered to that option
     /// @param option The option vote for
-    /// @param return True if successful
+    /// @return True if successful
     function vote(uint8 option)
         public
         whenVoting
@@ -71,7 +71,7 @@ contract BVTVotingToken is BVTMintable {
     /// @param recipient The recipient represents the option to vote for.
     ///         E.g. Option 1 is represented by the address 0x0000000000000000000000000000000000000001
     /// @param amount The amount of the tokens will represents the amount of votes
-    /// @param return True if successful
+    /// @return True if successful
     function transfer(address recipient, uint256 amount)
         public
         whenVoting
@@ -87,7 +87,7 @@ contract BVTVotingToken is BVTMintable {
     /// @param recipient The recipient represents the option to vote for.
     ///         E.g. Option 1 is represented by the address 0x0000000000000000000000000000000000000001
     /// @param amount The amount of the tokens will represents the amount of votes
-    /// @param return True if successful
+    /// @return True if successful
     function transferFrom(address sender, address recipient, uint256 amount)
         public
         whenVoting

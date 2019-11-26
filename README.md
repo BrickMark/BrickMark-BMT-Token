@@ -13,6 +13,7 @@ Best practice: https://consensys.github.io/smart-contract-best-practices/
 - Deployment to Rinkeby
 - Test Frontend
 - End2End Test Scenario with Gnosis MultiSig
+- KeyManagement BrickMark
 
 ## Requirements
 

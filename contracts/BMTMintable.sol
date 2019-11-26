@@ -16,7 +16,7 @@ contract BMTMintable is BMTVested, MinterRole {
     /// @notice Mints new BMT tokens. Only minters can call this function
     /// @param owners An array of recipients of the new generated tokens
     /// @param amounts A corresponding array of amounts to be assigned to the owners
-    /// @param return true if successfull
+    /// @return true if successfull
     function mintBatch(address[] memory owners, uint256[] memory amounts)
         public
         onlyMinter
@@ -39,7 +39,7 @@ contract BMTMintable is BMTVested, MinterRole {
     /// @param amounts A corresponding array of amounts to be assigned to the owners
     /// @param vestingEndTimes A corresponding array of unix timestamps in seconds / zulu time. Tokens will be vested
     ///         until that time
-    /// @param return true if successful
+    /// @return true if successful
     function mintBatchVested(
         address[] memory owners,
         uint256[] memory amounts,
@@ -63,7 +63,7 @@ contract BMTMintable is BMTVested, MinterRole {
     /// @param owners An array of recipients of the new generated tokens
     /// @param amounts A corresponding array of amounts to be assigned to the owners
     /// @param message A message to describe the dividend payment
-    /// @param return true if successfull
+    /// @return true if successfull
     function payDividend(
         address[] memory owners,
         uint256[] memory amounts,

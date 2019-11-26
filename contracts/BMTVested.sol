@@ -14,7 +14,7 @@ contract BMTVested is BMTFreezable {
 
     /// @notice Check if an address is vested or not
     /// @param account The specific address to check
-    /// @param return true if account is vested, otherwise false
+    /// @return true if account is vested, otherwise false
     function isVested(address account) public view returns (bool) {
         return
             _vestedEndTimeMap[account] != 0 &&
@@ -23,7 +23,7 @@ contract BMTVested is BMTFreezable {
 
     /// @notice Reads the vesting end time
     /// @param account The specific address to check
-    /// @param return 0: In case no vesting or vesting expired. Otherwise the Unix timestamp in seconds until the
+    /// @return 0: In case no vesting or vesting expired. Otherwise the Unix timestamp in seconds until the
     /// vesting remains
     function vestingEndTime(address account) public view returns (uint256) {
         return _vestedEndTimeMap[account];
@@ -31,7 +31,7 @@ contract BMTVested is BMTFreezable {
 
     /// @notice Checks the vested amount of tokens which are vested
     /// @param account The specific address to check
-    /// @param return the number of vested tokens
+    /// @return the number of vested tokens
     function vestedAmount(address account) public view returns (uint256) {
         if (isVested(account)) {
             return _vestedAmountsMap[account];
@@ -43,7 +43,7 @@ contract BMTVested is BMTFreezable {
     /// @notice Calculates the number of spendable tokens. Vested token holders are allowed to spend their dividend.
     ///         For non vested token holders it represents the `balanceOf()` function
     /// @param account The specific address to check
-    /// @param return the number of spendable tokens at the moment
+    /// @return the number of spendable tokens at the moment
     function spendableAmount(address account) public view returns (uint256) {
         if (isVested(account)) {
             uint256 balance = super.balanceOf(account);
