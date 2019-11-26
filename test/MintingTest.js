@@ -106,7 +106,7 @@ contract("BMTToken Minting test", async accounts => {
         );
     });
 
-    it("mintBatchVested - MintBatchVested to address ith balance", async () => {
+    it("mintBatchVested - MintBatchVested to address with balance", async () => {
         let instance = await BMTToken.new({ from: BrickMark });
         let recipients = [alice];
         let amounts = ["1000000000000000000"]
