@@ -39,17 +39,17 @@ contract("Gnosis MultiSig Test", async accounts => {
         // BMT Token. BrickMark Deployes the contract and is the minter
         let bmt = await BMTToken.new({ from: BrickMark });
         let result = await bmt.isMinter.call(BrickMark);
-        assert(result);
+        assert(result, "By default BrickMark is MinterRole");
 
         // Adding the MultiSig Contract as MinterRole
         result = await bmt.addMinter(multiSigMinter.address);
         result = await bmt.isMinter.call(multiSigMinter.address);
-        assert(result);
+        assert(result, "MultiSig contract should be MinterRole");
 
         // Remove BrickMark from the MinterRole. 
         result = await bmt.renounceMinter();
         result = await bmt.isMinter.call(BrickMark);
-        assert(!result);
+        assert(!result, "BrickMark should NOT be MinterRole");
 
         // Make sure BrickMark is not able to mint anymore
         await truffleAssert.reverts(
@@ -72,13 +72,11 @@ contract("Gnosis MultiSig Test", async accounts => {
 
         // Check result
         result = await bmt.balanceOf.call(alice);
-        assert.equal(result.toString(), amount);
+        assert.equal(result.toString(), amount, "Alice should have the right amount");
     });
 
 
     it("MultiSig - MultiSig PauserRole executes Pause", async () => {
-
-        const amount = "1000000000000000000000"
 
         // Initialize Gnosis MultiSig with 2-of-2 signatures
         let multiSigPauser = await MultiSig.new([PauserRole1, PauserRole2], 2, { from: BrickMark });
@@ -86,17 +84,17 @@ contract("Gnosis MultiSig Test", async accounts => {
         // BMT Token. BrickMark Deployes the contract and is the minter
         let bmt = await BMTToken.new({ from: BrickMark });
         let result = await bmt.isPauser.call(BrickMark);
-        assert(result);
+        assert(result, "By default BrickMark is PauserRole");
 
         // Adding the MultiSig Contract as PauserRole
         result = await bmt.addPauser(multiSigPauser.address);
         result = await bmt.isPauser.call(multiSigPauser.address);
-        assert(result);
+        assert(result, "MultiSig Contract should be PauserRole");
 
         // Remove BrickMark from the Pauser. 
         result = await bmt.renouncePauser();
         result = await bmt.isPauser.call(BrickMark);
-        assert(!result);
+        assert(!result, "BrickMark should NOT be in the PauserRole");
 
         // Make sure BrickMark is not able to mint anymore
         await truffleAssert.reverts(
@@ -115,13 +113,13 @@ contract("Gnosis MultiSig Test", async accounts => {
         const transactionId = result.logs[1].args['transactionId'].toString();
 
         result = await bmt.paused.call();
-        assert(!result);
+        assert(!result, "contract should NOT be paused");
 
         // MinterRole2 confirms the transaction. This will forward the call to the BMT smart contract and tokens will be minted.
         result = await multiSigPauser.confirmTransaction(transactionId, { from: PauserRole2 });
 
         // Check result
         result = await bmt.paused.call();
-        assert(result);
+        assert(result, "contract should be paused");
     });
 });
