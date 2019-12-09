@@ -29,6 +29,7 @@ contract BMTVested is BMTFreezable {
         return _vestedEndTimeMap[account];
     }
 
+    /// TODO: vestedBalance would be better
     /// @notice Checks the vested amount of tokens which are vested
     /// @param account The specific address to check
     /// @return the number of vested tokens
@@ -40,6 +41,7 @@ contract BMTVested is BMTFreezable {
         }
     }
 
+    /// TODO: spendableBalance would be better
     /// @notice Calculates the number of spendable tokens. Vested token holders are allowed to spend their dividend.
     ///         For non vested token holders it represents the `balanceOf()` function
     /// @param account The specific address to check
