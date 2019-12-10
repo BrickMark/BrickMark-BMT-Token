@@ -71,17 +71,20 @@
     <v-divider></v-divider>
 
     <Admin />
+    <Events />
   </div>
 </template>
 
 <script>
 import blockchain from "../js/blockchainInterface";
 import Admin from "./Admin";
+import Events from "./Events";
 
 export default {
   name: "Investors",
   components: {
-    Admin
+    Admin,
+    Events
   },
   data() {
     return {

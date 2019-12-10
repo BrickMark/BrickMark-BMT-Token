@@ -1,0 +1,59 @@
+<template>
+    <v-card class="mx-auto" max-width="400" tile>
+      <v-app-bar color="pink">
+        <v-toolbar-title>Events</v-toolbar-title>
+        <v-spacer></v-spacer>
+      </v-app-bar>
+
+      <v-list-item two-line v-for="event in events" v-bind:key="event.id">
+        <v-list-item-content>
+          <v-list-item-title>{{event.name}}</v-list-item-title>
+          <v-list-item-subtitle>{{event.detail}}</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+    </v-card>
+</template>
+
+<script>
+import blockchain from "../js/blockchainInterface";
+
+export default {
+  name: "Events",
+  data() {
+    return {
+      events: []
+    };
+  },
+  computed: {},
+  methods: {
+    eventListener(error, result) {
+      console.dir(error);
+      console.dir(result);
+      console.dir(result.returnValues);
+      if (result) {
+        var entry = {};
+        entry.id = result.id;
+        entry.name = result.event;
+
+        if (result.event === "Paused") {
+          entry.detail = "From: " + blockchain.toShortAddress(result.returnValues[0]);
+        } else if (result.event === "Unpaused") {
+          entry.detail = "From: " + blockchain.toShortAddress(result.returnValues[0]);
+        } else {
+          entry.detail = "coming soon";
+        }
+        var tmp = this.events.reverse();
+        tmp.push(entry);
+        this.events = tmp.reverse();
+      }
+    }
+  },
+  async created() {
+    let contractEvents = await blockchain.getAllEvents();
+    contractEvents.allEvents(this.eventListener);
+  }
+};
+</script>
+
+<style>
+</style>

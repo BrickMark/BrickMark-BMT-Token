@@ -118,6 +118,21 @@ var blockchain = {
         return investorInfo;
     },
 
+    async pause() {
+        const erc20Instance = await blockchain.getBMTInstance();
+        await erc20Instance.methods.pause().send();
+    },
+
+    async unpause() {
+        const erc20Instance = await blockchain.getBMTInstance();
+        await erc20Instance.methods.unpause().send();
+    },
+
+    async getAllEvents() {
+        const erc20Instance = await blockchain.getBMTInstance();
+        return erc20Instance.events;
+    },
+
     toShortAddress(address) {
         return address.substring(0, 6) + "..." + address.substring(38, 42);
     },
