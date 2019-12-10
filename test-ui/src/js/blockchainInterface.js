@@ -15,8 +15,10 @@ userMap.set("bmt3", "0x2B1cF63Ac93BfFdb5FbE8CC43010fA9fa92ED2D1");
 userMap.set("bmt4", "0xFC398aA810Bb07901813A4CE81c1654D1466b0eE");
 userMap.set("tokenHolder1", "0xb8ce4Ba055cB8A4bEd923C32B1a5d15aCF4f9E8F");
 userMap.set("tokenHolder2", "0x2a04950a2D9C8e0B2AFa6E47CEd8Aac35160696D");
-userMap.set("vestedTokenHolder1", "0x9258b85C2BDAE58037ECbdd016993AD38652ba1a");
-userMap.set("vestedTokenHolder2", "0xE919f4fD92c6c920afFFb7E319Dbee3D34BD214e");
+userMap.set("tokenHolder3", "0x9258b85C2BDAE58037ECbdd016993AD38652ba1a");
+userMap.set("tokenHolder4", "0xE919f4fD92c6c920afFFb7E319Dbee3D34BD214e");
+userMap.set("vestedTokenHolder1", "0xB90ce21773FEB81d88AE5cF371D8dFcb88420A6F");
+userMap.set("vestedTokenHolder2", "0x904597a138D9A335749b8042C1e41Dc8a32EdeA7");
 
 var blockchain = {
 
@@ -49,7 +51,7 @@ var blockchain = {
 
     async getBMTInstance() {
         var coinbase = await web3.eth.getCoinbase();
-        console.log("Coinbase:", coinbase);
+        //console.log("Coinbase:", coinbase);
         var erc20Instance = new web3.eth.Contract(bmtabi, this.getBMTAddress(), {
             from: coinbase, // default from address
             gasPrice: "20000000000" // default gas price in wei, 20 gwei in this case
@@ -86,22 +88,43 @@ var blockchain = {
     async getInvestorInfo(investorAddress) {
         const erc20Instance = await blockchain.getBMTInstance();
 
+        const decimals = await erc20Instance.methods.decimals().call();
+
         const balance = await erc20Instance.methods.balanceOf(investorAddress).call();
         const isVested = await erc20Instance.methods.isVested(investorAddress).call();
         const vestingEndTime = await erc20Instance.methods.vestingEndTime(investorAddress).call();
         const vestedBalance = await erc20Instance.methods.vestedAmount(investorAddress).call();
         const spendableBalance = await erc20Instance.methods.spendableAmount(investorAddress).call();
 
+        var hVestingEndTime = "";
+        if(isVested) {
+            hVestingEndTime = this.toHumanDate(vestingEndTime);
+        }
+
         var investorInfo = {
             address: investorAddress,
+            shortAddress: this.toShortAddress(investorAddress),
             balance: balance,
+            hBalance: this.toHumanNumber(balance, decimals),
             vested: isVested,
             vestingEndTime: vestingEndTime,
+            hVestingEndTime: hVestingEndTime,
             vestedBalance: vestedBalance,
-            spendableBalance: spendableBalance
+            hVestedBalance: this.toHumanNumber(vestedBalance, decimals),
+            spendableBalance: spendableBalance,
+            hSpendableBalance: this.toHumanNumber(spendableBalance, decimals)
         };
 
         return investorInfo;
+    },
+
+    toShortAddress(address) {
+        return address.substring(0, 6) + "..." + address.substring(38, 42);
+    },
+
+    toHumanDate(timestamp){
+        var date = new Date(timestamp*1000);
+        return date.toISOString().substring(0, 16) + "UTC";
     },
 
     toContractNumber(humanBalance, decimals) {

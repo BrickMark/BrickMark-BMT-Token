@@ -1,6 +1,10 @@
 <template>
   <div>
     <h1>Investors</h1>
+
+    <v-container class="px-0" fluid>
+      <v-checkbox v-model="exactBalances" label="Show exact balances"></v-checkbox>
+    </v-container>
     <v-simple-table>
       <template v-slot:default>
         <thead>
@@ -17,13 +21,19 @@
         <tbody>
           <tr v-for="investor in investors" v-bind:key="investor.address">
             <td>{{ investor.name }}</td>
-            <td>{{ investor.address }}</td>
-            <td>{{ investor.balance }}</td>
-            <td>{{ investor.vested }}</td>
-            <td>{{ investor.vestingEndTime }}</td>
-            <td>{{ investor.vestedBalance }}</td>
-            <td>{{ investor.spendableBalance }}</td>
+            <td>{{ investor.shortAddress }}</td>
 
+            <td v-if="exactBalances == true"> {{investor.balance }}</td>
+            <td v-else>{{ investor.hBalance }}</td>
+
+            <td>{{ investor.vested }}</td>
+            <td>{{ investor.hVestingEndTime }}</td>
+
+            <td v-if="exactBalances == true"> {{investor.vestedBalance }}</td>
+            <td v-else>{{ investor.hVestedBalance }}</td>
+
+            <td v-if="exactBalances == true"> {{investor.spendableBalance }}</td>
+            <td v-else>{{ investor.hSpendableBalance }}</td>
           </tr>
         </tbody>
       </template>
@@ -38,18 +48,26 @@ export default {
   name: "Investors",
   data() {
     return {
-      investors: []
+      investors: [],
+      timer: "",
+      exactBalances: false
     };
   },
   computed: {},
   methods: {
-    async getInvestors() {
-      // return await blockchain.getInvestors();
+    async refresh() {
+      console.log("refresh");
+      this.investors = await blockchain.getInvestors();
     }
   },
   async created() {
-    this.investors = await blockchain.getInvestors();
-    console.dir(this.investors);
+    await this.refresh();
+    //console.dir(this.investors);
+    this.timer = setInterval(this.refresh, 10000);
+  },
+  destroyed() {
+    //console.log("destroyed");
+    clearInterval(this.timer);
   }
 };
 </script>
