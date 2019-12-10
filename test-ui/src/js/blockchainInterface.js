@@ -77,7 +77,7 @@ var blockchain = {
             symbol: symbol,
             decimals: decimals,
             totalSupply: totalSupply,
-            totalSupplyHumanReadable: totalSupplyHumanReadable,
+            hTotalSupply: totalSupplyHumanReadable,
             paused: paused,
             frozen: frozen
         };

@@ -1,13 +1,13 @@
 <template>
   <div>
-    <h1>Investor</h1>
-    <p>Individual investor</p>
+    <h1>Admin</h1>
+    <p>Admin functionalities</p>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Investor",
+  name: "Admin",
   computed: {
 
   },
