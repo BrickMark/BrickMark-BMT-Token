@@ -26,7 +26,7 @@ export default {
   },
   computed: {},
   methods: {
-    eventListener(error, result) {
+    async eventListener(error, result) {
       console.dir(error);
       console.dir(result);
       console.dir(result.returnValues);
@@ -42,21 +42,33 @@ export default {
           entry.detail =
             "From: " + blockchain.toShortAddress(result.returnValues[0]);
         } else if (result.event === "Transfer") {
-          entry.detail = "From: " + blockchain.toShortAddress(result.returnValues[0]) +
-                        ", To: " + blockchain.toShortAddress(result.returnValues[1]) +
-                        ", BMT: " + blockchain.toHumanNumber(result.returnValues[2], 18);
+          entry.detail =
+            "From: " +
+            blockchain.toShortAddress(result.returnValues[0]) +
+            ", To: " +
+            blockchain.toShortAddress(result.returnValues[1]) +
+            ", BMT: " +
+            blockchain.toHumanNumber(result.returnValues[2], 18);
         } else {
           entry.detail = "coming soon";
         }
         var tmp = this.events.reverse();
         tmp.push(entry);
         this.events = tmp.reverse();
+
+        await this.updateParent();
       }
+    },
+
+    async updateParent() {
+      const investors = await blockchain.getInvestors();
+      this.$emit("eventToParent", investors);
     }
   },
   async created() {
     let contractEvents = await blockchain.getAllEvents();
     contractEvents.allEvents(this.eventListener);
+    await this.updateParent();
   }
 };
 </script>

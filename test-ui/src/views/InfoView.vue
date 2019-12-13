@@ -1,9 +1,5 @@
 <template>
   <div>
-    <v-container class="px-0" fluid>
-      <v-checkbox v-model="exactBalances" label="Show exact balances"></v-checkbox>
-    </v-container>
-
     <v-simple-table dense>
       <template v-slot:default>
         <tbody>
@@ -35,11 +31,15 @@ import blockchain from "../js/blockchainInterface";
 
 export default {
   name: "InfoView",
+  props: {
+    exactBalances: {
+      type: Boolean
+    }
+  },
   data() {
     return {
       info: {},
       timer: "",
-      exactBalances: false
     };
   },
   computed: {},
