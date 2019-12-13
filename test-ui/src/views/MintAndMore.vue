@@ -1,14 +1,8 @@
 <template>
   <div>
     <h1>MintAndMore</h1>
+          <!-- <v-combobox v-model="select" :items="items" label="I use chips" ></v-combobox> -->
 
-    <v-container fluid>
-      <v-row>
-        <v-col cols="12">
-          <!-- <v-combobox v-model="select" :items="items" label="I use chips" multiple chips></v-combobox> -->
-        </v-col>
-      </v-row>
-    </v-container>
     <br />
   </div>
 </template>
