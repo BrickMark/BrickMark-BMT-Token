@@ -3,22 +3,31 @@
     <h1>MintAndMore</h1>
           <!-- <v-combobox v-model="select" :items="items" label="I use chips" ></v-combobox> -->
 
-    <br />
+
+        <v-combobox
+          v-model="select"
+          :items="items"
+          label="Select a favorite activity or create a new one"
+        ></v-combobox>
+
   </div>
 </template>
 
 <script>
 import blockchain from "../js/blockchainInterface";
-//import Vuetify from 'vuetify/lib';
 
 export default {
   name: "MintAndMore",
-
   data() {
     return {
       simpleInvestors: [],
-      select: ["Programming", "Design"],
-      items: ["Programming", "Design", "Vue", "xx"]
+       select: 'Programming',
+        items: [
+          'Programming',
+          'Design',
+          'Vue',
+          'Vuetify',
+        ]
     };
   },
   computed: {},
