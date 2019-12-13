@@ -72,6 +72,7 @@
 
     <Admin />
     <Events />
+    <MintAndMore />
   </div>
 </template>
 
@@ -79,12 +80,14 @@
 import blockchain from "../js/blockchainInterface";
 import Admin from "./Admin";
 import Events from "./Events";
+import MintAndMore from "./MintAndMore"
 
 export default {
   name: "Investors",
   components: {
     Admin,
-    Events
+    Events,
+    MintAndMore
   },
   data() {
     return {

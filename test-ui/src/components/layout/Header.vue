@@ -1,11 +1,8 @@
 <template>
   <div>
-    <div id="nav">
-      <router-link to="/">Investors</router-link>|
-      <router-link to="/about">About</router-link>
-    </div>
-
-    <router-view />
+    <router-link to="/">Investors</router-link>|
+    <router-link to="/about">About</router-link>
+      <router-view />
   </div>
 </template>
 

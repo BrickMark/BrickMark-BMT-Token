@@ -37,9 +37,21 @@ var blockchain = {
     async getInvestors() {
         var investors = [];
 
-        for (let [k, v] of userMap) {
-            var investor = await this.getInvestorInfo(v);
-            investor.name = k;
+        for (let [name, address] of userMap) {
+            var investor = await this.getInvestorInfo(address);
+            investor.name = name;
+            investors.push(investor);
+        }
+        return investors;
+    },
+
+    getInvestorsSimple() {
+        var investors = [];
+
+        for (let [name, address] of userMap) {
+            var investor = {}
+            investor.address = address;
+            investor.name = name;
             investors.push(investor);
         }
         return investors;
@@ -143,11 +155,17 @@ var blockchain = {
     },
 
     toContractNumber(humanBalance, decimals) {
+        if(humanBalance == null || decimals == null) {
+            return "0";
+        }
         const result = ethers.utils.parseUnits(humanBalance.toString(), parseInt(decimals));
         return result.toString(10);
     },
 
     toHumanNumber(balance, decimals) {
+        if(balance == null || decimals == null) {
+            return "0";
+        }
         return ethers.utils.formatUnits(balance, parseInt(decimals));
     }
 }

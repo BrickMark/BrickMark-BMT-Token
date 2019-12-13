@@ -1,14 +1,7 @@
 <template>
-<html>
-  <head>
-    <meta charset="utf-8" />
-  </head>
-  <body>
-  <div id="app">
-    <Header />
-  </div>
-  </body>
-</html>
+    <v-app>
+        <Header />
+    </v-app>
 </template>
 
 <script>

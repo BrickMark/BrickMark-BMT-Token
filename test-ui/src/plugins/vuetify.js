@@ -1,7 +1,7 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
+import Vue from 'vue'
+import Vuetify from 'vuetify/lib'
 
-Vue.use(Vuetify);
-
-export default new Vuetify({
-});
+document.body.setAttribute('data-app', true)
+Vue.use(Vuetify)
+const opts = {}
+export default new Vuetify(opts)
