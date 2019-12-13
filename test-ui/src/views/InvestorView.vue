@@ -4,7 +4,7 @@
       <v-checkbox v-model="exactBalances" label="Show exact balances"></v-checkbox>
     </v-container>
 
-    <v-simple-table>
+    <v-simple-table dense>
       <template v-slot:default>
         <thead>
           <tr>
@@ -36,7 +36,25 @@
             <td v-else>{{ investor.hSpendableBalance }}</td>
 
             <td>
-              <v-btn text small color="primary">+</v-btn>
+              <div class="text-center">
+                <v-dialog v-model="investor.dialog" width="500">
+                  <template v-slot:activator="{ on }">
+                    <v-btn text small color="primary" v-on="on">+</v-btn>
+                  </template>
+
+                  <v-card>
+                    <v-card-title class="headline grey lighten-2" primary-title>Action</v-card-title>
+
+                    <InvestorAction v-bind:investor="investor" />
+
+                    <v-divider></v-divider>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="primary" text @click="investor.dialog = false; investorsDialog = []">Close</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -47,12 +65,17 @@
 
 <script>
 import blockchain from "../js/blockchainInterface";
+import InvestorAction from "./InvestorAction";
 
 export default {
   name: "InvestorView",
+  components: {
+    InvestorAction
+  },
   data() {
     return {
       investors: [],
+      investorsDialog: [],
       timer: "",
       exactBalances: false
     };
@@ -61,7 +84,19 @@ export default {
   methods: {
     async refresh() {
       console.log("refresh");
-      this.investors = await blockchain.getInvestors();
+      var tmpInvestors = await blockchain.getInvestors();
+
+      // Keeping track of the dialog property. Otherwise dialog disappear by refreshing...
+      if (tmpInvestors.length != this.investorsDialog.length) {
+        console.log("not same length");
+        this.investorsDialog = tmpInvestors;
+      }
+
+      for (var i = 0; i < tmpInvestors.length; i++) {
+        tmpInvestors[i].dialog = this.investorsDialog[i].dialog;
+      }
+
+      this.investors = tmpInvestors;
     }
   },
   async created() {

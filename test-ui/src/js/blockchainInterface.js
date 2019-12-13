@@ -1,6 +1,7 @@
 import Web3 from 'web3';
 import { ethers } from 'ethers';
 import bmtabi from './bmtabi';
+import { mintcream } from 'color-name';
 
 var web3 = new Web3(window.ethereum || "ws://localhost:8545");
 
@@ -128,6 +129,15 @@ var blockchain = {
         };
 
         return investorInfo;
+    },
+
+    async mint(investor, bmtAmount) {
+        const erc20Instance = await blockchain.getBMTInstance();
+        const decimals = await erc20Instance.methods.decimals().call();
+
+        var amount = this.toContractNumber(bmtAmount, decimals);
+        console.log("minting: " + amount);
+        await erc20Instance.methods.mintBatch([investor], [amount]).send();
     },
 
     async pause() {

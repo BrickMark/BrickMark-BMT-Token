@@ -1,17 +1,17 @@
 <template>
-    <v-card class="mx-auto" max-width="400" tile>
-      <v-app-bar color="pink">
-        <v-toolbar-title>Events</v-toolbar-title>
-        <v-spacer></v-spacer>
-      </v-app-bar>
+  <v-card class="mx-auto" max-width="400" tile>
+    <v-app-bar color="pink">
+      <v-toolbar-title>Events</v-toolbar-title>
+      <v-spacer></v-spacer>
+    </v-app-bar>
 
-      <v-list-item two-line v-for="event in events" v-bind:key="event.id">
-        <v-list-item-content>
-          <v-list-item-title>{{event.name}}</v-list-item-title>
-          <v-list-item-subtitle>{{event.detail}}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-    </v-card>
+    <v-list-item two-line v-for="event in events" v-bind:key="event.id">
+      <v-list-item-content>
+        <v-list-item-title>{{event.name}}</v-list-item-title>
+        <v-list-item-subtitle>{{event.detail}}</v-list-item-subtitle>
+      </v-list-item-content>
+    </v-list-item>
+  </v-card>
 </template>
 
 <script>
@@ -36,9 +36,15 @@ export default {
         entry.name = result.event;
 
         if (result.event === "Paused") {
-          entry.detail = "From: " + blockchain.toShortAddress(result.returnValues[0]);
+          entry.detail =
+            "From: " + blockchain.toShortAddress(result.returnValues[0]);
         } else if (result.event === "Unpaused") {
-          entry.detail = "From: " + blockchain.toShortAddress(result.returnValues[0]);
+          entry.detail =
+            "From: " + blockchain.toShortAddress(result.returnValues[0]);
+        } else if (result.event === "Transfer") {
+          entry.detail = "From: " + blockchain.toShortAddress(result.returnValues[0]) +
+                        ", To: " + blockchain.toShortAddress(result.returnValues[1]) +
+                        ", BMT: " + blockchain.toHumanNumber(result.returnValues[2], 18);
         } else {
           entry.detail = "coming soon";
         }
