@@ -8,7 +8,7 @@
         <v-text-field label="BMT" v-model="bmtToMint"></v-text-field>
       </v-col>
       <v-col sm="3">
-        <v-btn small color="primary" v-on:click="mint()">Mint</v-btn>
+        <v-btn small color="primary" v-on:click="mint()" block>Mint</v-btn>
       </v-col>
     </v-row>
     <v-row>
@@ -34,7 +34,7 @@
         </v-menu>
       </v-col>
       <v-col sm="3">
-        <v-btn small color="primary" v-on:click="mintVested()">Mint Vested</v-btn>
+        <v-btn small color="primary" v-on:click="mintVested()" block>Mint Vested</v-btn>
       </v-col>
     </v-row>
     <v-row>
@@ -48,7 +48,15 @@
         <v-text-field label="Message" v-model="dividendMsg"></v-text-field>
       </v-col>
       <v-col sm="3">
-        <v-btn small color="primary" v-on:click="payDividend()">Pay Dividend</v-btn>
+        <v-btn small color="primary" v-on:click="payDividend()" block>Pay Dividend</v-btn>
+      </v-col>
+    </v-row>
+        <v-row>
+      <v-col sm="9">
+        <v-subheader>Hide user from table</v-subheader>
+      </v-col>
+      <v-col sm="3">
+        <v-btn small color="danger" v-on:click="hideUser()" block>Hide User</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -99,6 +107,11 @@ export default {
         this.bmtDividend,
         this.dividendMsg
       );
+    },
+    async hideUser() {
+      console.log("Hide user from table");
+      this.$store.dispatch("removeUser", this.investor);
+
     }
   },
   async created() {}

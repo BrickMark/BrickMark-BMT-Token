@@ -52,6 +52,9 @@ export const store = new Vuex.Store({
             }
             context.commit('setUsers', updatedUsers);
         },
+        removeUser: (context, user) => {
+            context.commit('removeUser', user);
+        },
         updateExactBalance: (context, value) => {
             context.commit('updateExactBalance', value);
         },
