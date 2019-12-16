@@ -18,7 +18,9 @@ export const store = new Vuex.Store({
             { "name": "vestedTokenHolder1", "address": "0xB90ce21773FEB81d88AE5cF371D8dFcb88420A6F" },
             { "name": "vestedTokenHolder2", "address": "0x904597a138D9A335749b8042C1e41Dc8a32EdeA7" }
         ],
-        exactBalance: true
+        exactBalance: true,
+        bmtAddress: "0x7D586da8c71163e41cba108e6624b94B2de9EaaB",
+        bmtInfo: {}
     },
     mutations: {
         setUsers(state, users) {
@@ -33,9 +35,10 @@ export const store = new Vuex.Store({
             });
         },
         updateExactBalance(state, value){
-            console.log("update exact balance: " + value);
-
             state.exactBalance = value;
+        },
+        updateBmtInfo(state, bmtInfo) {
+            state.bmtInfo = bmtInfo;
         }
     },
     actions: {
@@ -51,11 +54,17 @@ export const store = new Vuex.Store({
         },
         updateExactBalance: (context, value) => {
             context.commit('updateExactBalance', value);
+        },
+        updateBmtInfo: async (context) => {
+            var info = await blockchain.getBMTInfo();
+            context.commit('updateBmtInfo', info);
         }
     },
     getters: {
         users: state => state.users,
-        exactBalance: state => state.exactBalance
+        exactBalance: state => state.exactBalance,
+        bmtAddress: state => state.bmtAddress,
+        bmtInfo: state => state.bmtInfo
     }
 
 });

@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     async refresh() {
-      console.log("manual refresh");
+      this.$store.dispatch("updateBmtInfo");
       this.$store.dispatch("updateAllUsers", this.$store.getters.users);
     }
   }

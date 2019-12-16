@@ -1,6 +1,7 @@
 import Web3 from 'web3';
 import { ethers } from 'ethers';
 import bmtabi from './bmtabi';
+import { store } from '../store/store'
 
 var web3 = new Web3(window.ethereum || "ws://localhost:8545");
 
@@ -13,7 +14,9 @@ window.ethereum.enable().then(function (addresses) {
 var blockchain = {
 
     getBMTAddress() {
-        return "0x7D586da8c71163e41cba108e6624b94B2de9EaaB";
+       
+       return store.state.bmtAddress;
+        // return "0x7D586da8c71163e41cba108e6624b94B2de9EaaB";
     },
 
     getWeb3() {

@@ -14,6 +14,7 @@ export default {
   },
   created: function () {
     console.log("App loaded");
+    this.$store.dispatch("updateBmtInfo");
     this.$store.dispatch("updateAllUsers", this.$store.getters.users);
   }
   

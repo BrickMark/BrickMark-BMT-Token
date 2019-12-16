@@ -5,20 +5,20 @@
         <tbody>
           <tr>
             <td>Name / Symbol</td>
-            <td>{{info.name}} / {{info.symbol}}</td>
+            <td>{{$store.getters.bmtInfo.name}} / {{$store.getters.bmtInfo.symbol}}</td>
           </tr>
           <tr>
             <td>Decimals</td>
-            <td>{{info.decimals}}</td>
+            <td>{{$store.getters.bmtInfo.decimals}}</td>
           </tr>
           <tr>
             <td>Total Supply</td>
-            <td v-if="$store.getters.exactBalance == true">{{ info.totalSupply}}</td>
-            <td v-else>{{ info.hTotalSupply}}</td>
+            <td v-if="$store.getters.exactBalance == true">{{ $store.getters.bmtInfo.totalSupply}}</td>
+            <td v-else>{{ $store.getters.bmtInfo.hTotalSupply}}</td>
           </tr>
           <tr>
             <td>Paused / Frozen</td>
-            <td>{{info.paused}} / {{info.frozen}}</td>
+            <td>{{$store.getters.bmtInfo.paused}} / {{$store.getters.bmtInfo.frozen}}</td>
           </tr>
         </tbody>
       </template>
@@ -31,26 +31,6 @@ import blockchain from "../js/blockchainInterface";
 
 export default {
   name: "InfoView",
-  data() {
-    return {
-      info: {},
-      timer: "",
-    };
-  },
-  computed: {},
-  methods: {
-    async refresh() {
-      console.log("refresh");
-      this.info = await blockchain.getBMTInfo();
-    }
-  },
-  async created() {
-    await this.refresh();
-    this.timer = setInterval(this.refresh, 10000);
-  },
-  destroyed() {
-    clearInterval(this.timer);
-  }
 };
 </script>
 <style lang="scss" scoped>
