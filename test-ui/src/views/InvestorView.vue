@@ -32,32 +32,13 @@
             <td v-else>{{ investor.hSpendableBalance }}</td>
 
             <td>
-              <div class="text-center">
-                <v-dialog v-model="investor.dialog" width="500">
-                  <template v-slot:activator="{ on }">
-                    <v-btn text small color="primary" v-on="on">+</v-btn>
-                  </template>
-
-                  <v-card>
-                    <v-card-title class="headline grey lighten-2" primary-title>Action</v-card-title>
-
-                    <InvestorAction v-bind:investor="investor" />
-
-                    <v-divider></v-divider>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn color="primary" text @click="investor.dialog = false">Close</v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-              </div>
+              <InvestorAction v-bind:investor="investor" />
             </td>
           </tr>
         </tbody>
       </template>
     </v-simple-table>
     <AddUser />
-    
   </div>
 </template>
 

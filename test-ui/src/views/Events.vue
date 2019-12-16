@@ -27,9 +27,9 @@ export default {
   computed: {},
   methods: {
     async eventListener(error, result) {
-      console.dir(error);
-      console.dir(result);
-      console.dir(result.returnValues);
+      //  console.dir(error);
+      //  console.dir(result);
+      //  console.dir(result.returnValues);
       if (result) {
         var entry = {};
         entry.id = result.id;
@@ -66,6 +66,9 @@ export default {
             result.returnValues[2];
         } else {
           entry.detail = "coming soon";
+
+          console.dir(result);
+          console.dir(result.returnValues);
         }
         var tmp = this.events.reverse();
         tmp.push(entry);
