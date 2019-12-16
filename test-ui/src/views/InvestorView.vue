@@ -14,20 +14,20 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="investor in investors" v-bind:key="investor.address">
+        <tr v-for="investor in $store.getters.users" v-bind:key="investor.address">
           <td>{{ investor.name }}</td>
           <td>{{ investor.shortAddress }}</td>
 
-          <td v-if="exactBalances == true">{{investor.balance }}</td>
+          <td v-if="$store.getters.exactBalance == true">{{investor.balance }}</td>
           <td v-else>{{ investor.hBalance }}</td>
 
           <td>{{ investor.vested }}</td>
           <td>{{ investor.hVestingEndTime }}</td>
 
-          <td v-if="exactBalances == true">{{investor.vestedBalance }}</td>
+          <td v-if="$store.getters.exactBalance == true">{{investor.vestedBalance }}</td>
           <td v-else>{{ investor.hVestedBalance }}</td>
 
-          <td v-if="exactBalances == true">{{investor.spendableBalance }}</td>
+          <td v-if="$store.getters.exactBalance == true">{{investor.spendableBalance }}</td>
           <td v-else>{{ investor.hSpendableBalance }}</td>
 
           <td>
@@ -69,14 +69,6 @@ export default {
   name: "InvestorView",
   components: {
     InvestorAction
-  },
-  props: {
-    investors: {
-      type: Array
-    },
-    exactBalances: {
-      type: Boolean
-    }
   }
 };
 </script>

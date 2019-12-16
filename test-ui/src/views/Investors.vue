@@ -2,17 +2,17 @@
   <div>
     <h1>Investors</h1>
     <v-checkbox v-model="exactBalances" label="Show exact balances"></v-checkbox>
-    <v-btn x-small  v-on:click="refresh()">Refresh</v-btn>
+    <v-btn x-small v-on:click="refresh()">Refresh</v-btn>
 
-    <InfoView v-bind:investors="investors" v-bind:exactBalances="exactBalances" />
+    <InfoView />
 
     <br />
     <br />
 
-    <InvestorView v-bind:investors="investors" v-bind:exactBalances="exactBalances" />
+    <InvestorView />
+
     <Admin />
-    <Events v-on:eventToParent="newEvent" />
-
+    <Events />
   </div>
 </template>
 
@@ -30,22 +30,21 @@ export default {
     Events,
     InfoView,
     InvestorView
-    // MintAndMore
   },
-  data() {
-    return {
-      investors: [],
-      exactBalances: true
-    };
+  computed: {
+    exactBalances: {
+      get() {
+        return this.$store.getters.exactBalance;
+      },
+      set(value) {
+        this.$store.dispatch("updateExactBalance", value);
+      }
+    }
   },
   methods: {
-    // Triggered when `childToParent` event is emitted by the child.
-    newEvent(value) {
-      this.investors = value;
-    },
     async refresh() {
       console.log("manual refresh");
-      this.investors = await blockchain.getInvestors();
+      this.$store.dispatch("updateAllUsers", this.$store.getters.users);
     }
   }
 };

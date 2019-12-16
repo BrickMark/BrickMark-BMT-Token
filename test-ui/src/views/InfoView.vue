@@ -13,7 +13,7 @@
           </tr>
           <tr>
             <td>Total Supply</td>
-            <td v-if="exactBalances == true">{{ info.totalSupply}}</td>
+            <td v-if="$store.getters.exactBalance == true">{{ info.totalSupply}}</td>
             <td v-else>{{ info.hTotalSupply}}</td>
           </tr>
           <tr>
@@ -31,11 +31,6 @@ import blockchain from "../js/blockchainInterface";
 
 export default {
   name: "InfoView",
-  props: {
-    exactBalances: {
-      type: Boolean
-    }
-  },
   data() {
     return {
       info: {},

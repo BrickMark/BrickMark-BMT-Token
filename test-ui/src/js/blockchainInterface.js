@@ -1,7 +1,6 @@
 import Web3 from 'web3';
 import { ethers } from 'ethers';
 import bmtabi from './bmtabi';
-import { mintcream } from 'color-name';
 
 var web3 = new Web3(window.ethereum || "ws://localhost:8545");
 
@@ -11,18 +10,6 @@ window.ethereum.enable().then(function (addresses) {
     console.log("Your Address:", addresses[0]);
 });
 
-var userMap = new Map();
-userMap.set("bmt1", "0xb086E03bcBb7f7F486209Dc23A78CFBeBEE169D9");
-userMap.set("bmt2", "0x2F6c3a35CfD7460c3d9952cdcC45CCf63D36e8AB");
-userMap.set("bmt3", "0x2B1cF63Ac93BfFdb5FbE8CC43010fA9fa92ED2D1");
-userMap.set("bmt4", "0xFC398aA810Bb07901813A4CE81c1654D1466b0eE");
-userMap.set("tokenHolder1", "0xb8ce4Ba055cB8A4bEd923C32B1a5d15aCF4f9E8F");
-userMap.set("tokenHolder2", "0x2a04950a2D9C8e0B2AFa6E47CEd8Aac35160696D");
-userMap.set("tokenHolder3", "0x9258b85C2BDAE58037ECbdd016993AD38652ba1a");
-userMap.set("tokenHolder4", "0xE919f4fD92c6c920afFFb7E319Dbee3D34BD214e");
-userMap.set("vestedTokenHolder1", "0xB90ce21773FEB81d88AE5cF371D8dFcb88420A6F");
-userMap.set("vestedTokenHolder2", "0x904597a138D9A335749b8042C1e41Dc8a32EdeA7");
-
 var blockchain = {
 
     getBMTAddress() {
@@ -31,37 +18,6 @@ var blockchain = {
 
     getWeb3() {
         return web3;
-    },
-
-    getUsers() {
-        return userMap;
-    },
-
-    async getInvestors() {
-        var investors = [];
-
-        for (let [name, address] of userMap) {
-            var investor = await this.getInvestorInfo(address);
-            investor.name = name;
-            investors.push(investor);
-        }
-        return investors;
-    },
-
-    getInvestorsSimple() {
-        var investors = [];
-
-        for (let [name, address] of userMap) {
-            var investor = {}
-            investor.address = address;
-            investor.name = name;
-            investors.push(investor);
-        }
-        return investors;
-    },
-
-    showMessage() {
-        console.log("Message");
     },
 
     async getBMTInstance() {
@@ -100,7 +56,7 @@ var blockchain = {
         return bmtInfo;
     },
 
-    async getInvestorInfo(investorAddress) {
+    async getInvestorInfo(investorAddress, name) {
         const erc20Instance = await blockchain.getBMTInstance();
 
         const balance = await erc20Instance.methods.balanceOf(investorAddress).call();
@@ -114,7 +70,8 @@ var blockchain = {
             hVestingEndTime = this.toHumanDate(vestingEndTime);
         }
 
-        var investorInfo = {
+        var user = {
+            name: name,
             address: investorAddress,
             shortAddress: this.toShortAddress(investorAddress),
             balance: balance,
@@ -128,7 +85,7 @@ var blockchain = {
             hSpendableBalance: this.toHumanNumber(spendableBalance)
         };
 
-        return investorInfo;
+        return user;
     },
 
     async mint(investor, bmtAmount) {

@@ -61,8 +61,9 @@ export default {
             ", Account: " +
             blockchain.toShortAddress(result.returnValues[0]) +
             ", BMT: " +
-            blockchain.toHumanNumber(result.returnValues[1]) + 
-            ", Msg: " + result.returnValues[2]
+            blockchain.toHumanNumber(result.returnValues[1]) +
+            ", Msg: " +
+            result.returnValues[2];
         } else {
           entry.detail = "coming soon";
         }
@@ -75,8 +76,7 @@ export default {
     },
 
     async updateParent() {
-      const investors = await blockchain.getInvestors();
-      this.$emit("eventToParent", investors);
+      this.$store.dispatch("updateAllUsers", this.$store.getters.users);
     }
   },
   async created() {

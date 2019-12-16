@@ -11,7 +11,12 @@ export default {
   name: "App",
   components: {
     Header
+  },
+  created: function () {
+    console.log("App loaded");
+    this.$store.dispatch("updateAllUsers", this.$store.getters.users);
   }
+  
 };
 </script>
 
