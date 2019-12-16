@@ -55,6 +55,10 @@ export const store = new Vuex.Store({
         removeUser: (context, user) => {
             context.commit('removeUser', user);
         },
+        addUser: async (context, user) => {
+            var newUser = await blockchain.getInvestorInfo(user.address, user.name);
+            context.commit('addUser', newUser);
+        },
         updateExactBalance: (context, value) => {
             context.commit('updateExactBalance', value);
         },
