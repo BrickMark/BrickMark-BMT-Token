@@ -41,7 +41,6 @@ export default {
   methods: {
     // Triggered when `childToParent` event is emitted by the child.
     newEvent(value) {
-      console.log("got event: " + value);
       this.investors = value;
     },
     async refresh() {

@@ -5,6 +5,8 @@ import { mintcream } from 'color-name';
 
 var web3 = new Web3(window.ethereum || "ws://localhost:8545");
 
+const decimals = 18;
+
 window.ethereum.enable().then(function (addresses) {
     console.log("Your Address:", addresses[0]);
 });
@@ -83,7 +85,7 @@ var blockchain = {
         const paused = await erc20Instance.methods.paused().call();
         const frozen = await erc20Instance.methods.isFrozen().call();
 
-        const totalSupplyHumanReadable = this.toHumanNumber(totalSupply, decimals);
+        const totalSupplyHumanReadable = this.toHumanNumber(totalSupply);
 
         var bmtInfo = {
             name: name,
@@ -101,8 +103,6 @@ var blockchain = {
     async getInvestorInfo(investorAddress) {
         const erc20Instance = await blockchain.getBMTInstance();
 
-        const decimals = await erc20Instance.methods.decimals().call();
-
         const balance = await erc20Instance.methods.balanceOf(investorAddress).call();
         const isVested = await erc20Instance.methods.isVested(investorAddress).call();
         const vestingEndTime = await erc20Instance.methods.vestingEndTime(investorAddress).call();
@@ -118,14 +118,14 @@ var blockchain = {
             address: investorAddress,
             shortAddress: this.toShortAddress(investorAddress),
             balance: balance,
-            hBalance: this.toHumanNumber(balance, decimals),
+            hBalance: this.toHumanNumber(balance),
             vested: isVested,
             vestingEndTime: vestingEndTime,
             hVestingEndTime: hVestingEndTime,
             vestedBalance: vestedBalance,
-            hVestedBalance: this.toHumanNumber(vestedBalance, decimals),
+            hVestedBalance: this.toHumanNumber(vestedBalance),
             spendableBalance: spendableBalance,
-            hSpendableBalance: this.toHumanNumber(spendableBalance, decimals)
+            hSpendableBalance: this.toHumanNumber(spendableBalance)
         };
 
         return investorInfo;
@@ -133,11 +133,18 @@ var blockchain = {
 
     async mint(investor, bmtAmount) {
         const erc20Instance = await blockchain.getBMTInstance();
-        const decimals = await erc20Instance.methods.decimals().call();
 
-        var amount = this.toContractNumber(bmtAmount, decimals);
-        console.log("minting: " + amount);
+        var amount = this.toContractNumber(bmtAmount, 18);
+        console.log("mint: " + amount);
         await erc20Instance.methods.mintBatch([investor], [amount]).send();
+    },
+
+    async mintVested(investor, bmtAmount, vestingEndDateUnixTime) {
+        const erc20Instance = await blockchain.getBMTInstance();
+
+        var amount = this.toContractNumber(bmtAmount);
+        console.log("mintVested: " + amount);
+        await erc20Instance.methods.mintBatchVested([investor], [amount], [vestingEndDateUnixTime]).send();
     },
 
     async pause() {
@@ -164,19 +171,19 @@ var blockchain = {
         return date.toISOString().substring(0, 16) + "UTC";
     },
 
-    toContractNumber(humanBalance, decimals) {
-        if(humanBalance == null || decimals == null) {
+    toContractNumber(humanBalance) {
+        if(humanBalance == null) {
             return "0";
         }
-        const result = ethers.utils.parseUnits(humanBalance.toString(), parseInt(decimals));
+        const result = ethers.utils.parseUnits(humanBalance.toString(), decimals);
         return result.toString(10);
     },
 
-    toHumanNumber(balance, decimals) {
-        if(balance == null || decimals == null) {
+    toHumanNumber(balance) {
+        if(balance == null) {
             return "0";
         }
-        return ethers.utils.formatUnits(balance, parseInt(decimals));
+        return ethers.utils.formatUnits(balance, decimals);
     }
 }
 

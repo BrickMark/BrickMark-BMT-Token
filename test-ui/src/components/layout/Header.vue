@@ -2,7 +2,10 @@
   <div>
     <router-link to="/">Investors</router-link>|
     <router-link to="/about">About</router-link>
+
+    <v-content>
       <router-view />
+    </v-content>
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <v-card class="mx-auto" max-width="400" tile>
-    <v-app-bar color="pink">
+    <v-app-bar>
       <v-toolbar-title>Events</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-app-bar>
@@ -48,7 +48,14 @@ export default {
             ", To: " +
             blockchain.toShortAddress(result.returnValues[1]) +
             ", BMT: " +
-            blockchain.toHumanNumber(result.returnValues[2], 18);
+            blockchain.toHumanNumber(result.returnValues[2]);
+        } else if (result.event === "AccountVested") {
+          var endTime = parseInt(result.returnValues[1]);
+          entry.detail =
+            ", Account: " +
+            blockchain.toShortAddress(result.returnValues[0]) +
+            ", End Time: " +
+            blockchain.toHumanDate(endTime);
         } else {
           entry.detail = "coming soon";
         }
