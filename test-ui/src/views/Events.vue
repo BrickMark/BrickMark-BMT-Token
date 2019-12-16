@@ -56,6 +56,13 @@ export default {
             blockchain.toShortAddress(result.returnValues[0]) +
             ", End Time: " +
             blockchain.toHumanDate(endTime);
+        } else if (result.event === "DividendPayed") {
+          entry.detail =
+            ", Account: " +
+            blockchain.toShortAddress(result.returnValues[0]) +
+            ", BMT: " +
+            blockchain.toHumanNumber(result.returnValues[1]) + 
+            ", Msg: " + result.returnValues[2]
         } else {
           entry.detail = "coming soon";
         }

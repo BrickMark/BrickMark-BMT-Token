@@ -147,6 +147,14 @@ var blockchain = {
         await erc20Instance.methods.mintBatchVested([investor], [amount], [vestingEndDateUnixTime]).send();
     },
 
+    async payDividend(investor, vestingAmount, message) {
+        const erc20Instance = await blockchain.getBMTInstance();
+
+        var amount = this.toContractNumber(vestingAmount);
+        console.log("Pay Dividend: " + amount);
+        await erc20Instance.methods.payDividend([investor], [amount], message).send();
+    },
+
     async pause() {
         const erc20Instance = await blockchain.getBMTInstance();
         await erc20Instance.methods.pause().send();
