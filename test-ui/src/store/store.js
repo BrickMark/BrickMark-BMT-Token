@@ -20,7 +20,8 @@ export const store = new Vuex.Store({
         ],
         exactBalance: true,
         bmtAddress: "0x7D586da8c71163e41cba108e6624b94B2de9EaaB",
-        bmtInfo: {}
+        bmtInfo: {},
+        events: []
     },
     mutations: {
         setUsers(state, users) {
@@ -39,10 +40,15 @@ export const store = new Vuex.Store({
         },
         updateBmtInfo(state, bmtInfo) {
             state.bmtInfo = bmtInfo;
+        },
+        addEvent(state, event) {
+            console.log("add: " + event);
+            state.events.unshift(event);
         }
     },
     actions: {
-        updateAllUsers: async (context, users) => {
+        updateAllUsers: async (context) => {
+            var users = store.getters.users;
             var updatedUsers = [];
             for(var i=0; i<users.length; i++){
                 var newUser = await blockchain.getInvestorInfo(users[i].address, users[i].name);
@@ -65,13 +71,19 @@ export const store = new Vuex.Store({
         updateBmtInfo: async (context) => {
             var info = await blockchain.getBMTInfo();
             context.commit('updateBmtInfo', info);
+        },
+        addEvent: (context, newEvent) => {
+            context.commit('addEvent', newEvent);
+            store.dispatch("updateBmtInfo");
+            store.dispatch("updateAllUsers");
         }
     },
     getters: {
         users: state => state.users,
         exactBalance: state => state.exactBalance,
         bmtAddress: state => state.bmtAddress,
-        bmtInfo: state => state.bmtInfo
+        bmtInfo: state => state.bmtInfo,
+        events: state => state.events
     }
 
 });

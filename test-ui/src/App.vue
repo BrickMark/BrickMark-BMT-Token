@@ -9,18 +9,24 @@
 </template>
 
 <script>
+import blockchain from "./js/blockchainInterface";
+import eventListener from "./js/eventListener"
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 export default {
+
   name: "App",
   components: {
     Navbar,
     Footer
   },
-  created: function() {
+  created: async function() {
     console.log("App loaded");
     this.$store.dispatch("updateBmtInfo");
-    this.$store.dispatch("updateAllUsers", this.$store.getters.users);
+    this.$store.dispatch("updateAllUsers");
+
+    let contractEvents = await blockchain.getAllEvents();
+    contractEvents.allEvents(eventListener.eventListener);
   }
 };
 </script>

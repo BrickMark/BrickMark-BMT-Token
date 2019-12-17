@@ -40,7 +40,7 @@ export default {
   methods: {
     async refresh() {
       this.$store.dispatch("updateBmtInfo");
-      this.$store.dispatch("updateAllUsers", this.$store.getters.users);
+      this.$store.dispatch("updateAllUsers");
     }
   }
 };
