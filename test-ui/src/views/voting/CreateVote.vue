@@ -43,9 +43,10 @@ export default {
    methods: {
     async createContract() {
       console.log("Create Cpontract");
-      var address = await blockchain.deployVoting(this.votingText, 3);
+      var address = await blockchain.deployVoting(this.votingText, parseInt(this.votingOption));
       this.$store.dispatch("setBvtAddress", address);
       this.$store.dispatch("updateBvtInfo");
+      //https://vuetifyjs.com/en/components/steppers
     },
    }
 };
