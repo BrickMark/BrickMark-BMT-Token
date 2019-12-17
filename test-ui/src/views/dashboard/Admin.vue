@@ -1,13 +1,8 @@
 <template>
   <div>
-    <h1>Admin</h1>
-    <p>Admin functionalities</p>
     <div>Contract state</div>
-    <v-btn @click="pause()">Pause</v-btn>
-    <v-btn @click="unpause()">Unpause</v-btn>
-
-    <br />
-    <br />
+    <v-btn @click="pause()" color="primary" x-small>Pause</v-btn>
+    <v-btn @click="unpause()" color="primary" x-small>Unpause</v-btn>
   </div>
 </template>
 

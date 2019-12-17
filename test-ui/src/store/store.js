@@ -18,7 +18,7 @@ export const store = new Vuex.Store({
             { "name": "vestedTokenHolder1", "address": "0xB90ce21773FEB81d88AE5cF371D8dFcb88420A6F" },
             { "name": "vestedTokenHolder2", "address": "0x904597a138D9A335749b8042C1e41Dc8a32EdeA7" }
         ],
-        exactBalance: true,
+        exactBalance: false,
         bmtAddress: "0x7D586da8c71163e41cba108e6624b94B2de9EaaB",
         bmtInfo: {},
         events: []
@@ -42,7 +42,6 @@ export const store = new Vuex.Store({
             state.bmtInfo = bmtInfo;
         },
         addEvent(state, event) {
-            console.log("add: " + event);
             state.events.unshift(event);
         }
     },

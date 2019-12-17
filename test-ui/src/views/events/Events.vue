@@ -1,9 +1,5 @@
 <template>
-  <v-card class="mx-auto" max-width="400" tile>
-    <v-app-bar>
-      <v-toolbar-title>Events</v-toolbar-title>
-      <v-spacer></v-spacer>
-    </v-app-bar>
+  <v-card class="mx-auto" tile>
 
     <v-list-item two-line v-for="event in $store.getters.events" v-bind:key="event.id">
       <v-list-item-content>

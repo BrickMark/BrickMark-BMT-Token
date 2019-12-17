@@ -1,16 +1,29 @@
 <template>
   <div>
-    <h1>BMT Dashboard</h1>
-    <v-checkbox v-model="exactBalances" label="Show exact balances"></v-checkbox>
-    <v-btn x-small v-on:click="refresh()">Refresh</v-btn>
-
-    <InfoView />
-
-    <br />
-    <br />
-
-    <InvestorView />
-    <Admin />
+    <h1 class="pa-2">BMT Dashboard</h1>
+    <v-container class="grey lighten-5" >
+      <v-row no-gutters >
+        <v-col sm="6" >
+          <v-card class="pa-2" outlined tile>
+            <InfoView />
+          </v-card>
+        </v-col>
+        <v-col sm="6">
+          <v-card class="pa-2" outlined tile>
+            <Admin />
+            <v-checkbox v-model="exactBalances" label="Show exact balances" x-small></v-checkbox>
+            <v-btn x-small v-on:click="refresh()">Refresh</v-btn>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col sm="12">
+          <v-card class="pa-2" outlined tile>
+            <InvestorView />
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
