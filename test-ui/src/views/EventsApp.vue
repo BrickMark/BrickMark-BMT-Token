@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Events</h1>
+    <h1 class="pa-2">Events</h1>
     <Events />
   </div>
 </template>
