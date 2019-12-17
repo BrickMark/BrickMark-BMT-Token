@@ -30,7 +30,7 @@ export default {
     drawer: null,
     links: [
       {icon: "mdi-home-currency-usd", text: "Dashboard", route: "/"},
-      {icon: "mdi-vote", text: "Voting", route: "/about"}
+      {icon: "mdi-flash", text: "Events", route: "/events"}
     ]
   })
 };

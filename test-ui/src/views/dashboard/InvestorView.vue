@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import blockchain from "../js/blockchainInterface";
+import blockchain from "../../js/blockchainInterface";
 import InvestorAction from "./InvestorAction";
 import AddUser from "./AddUser";
 

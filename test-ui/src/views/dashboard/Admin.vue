@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import blockchain from "../js/blockchainInterface";
+import blockchain from "../../js/blockchainInterface";
 
 export default {
   name: "Admin",

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Investors</h1>
+    <h1>BMT Dashboard</h1>
     <v-checkbox v-model="exactBalances" label="Show exact balances"></v-checkbox>
     <v-btn x-small v-on:click="refresh()">Refresh</v-btn>
 
@@ -10,24 +10,20 @@
     <br />
 
     <InvestorView />
-
     <Admin />
-    <Events />
   </div>
 </template>
 
 <script>
 import blockchain from "../js/blockchainInterface";
-import Admin from "./Admin";
-import Events from "./Events";
-import InfoView from "./InfoView";
-import InvestorView from "./InvestorView";
+import Admin from "./dashboard/Admin";
+import InfoView from "./dashboard/InfoView";
+import InvestorView from "./dashboard/InvestorView";
 
 export default {
-  name: "Investors",
+  name: "DashboardApp",
   components: {
     Admin,
-    Events,
     InfoView,
     InvestorView
   },

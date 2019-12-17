@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>This is an about page</h1>
-
+    <h1>Events</h1>
+    <Events />
     <div>Users:</div>
     <v-list class="pa-0">
       <div v-for="user in $store.getters.users" :key="user.address">
@@ -12,7 +12,11 @@
 </template>
 
 <script>
+import Events from "./events/Events";
 export default {
-  name: "About"
+  name: "EventsApp",
+  components: {
+    Events
+  }
 };
 </script>
