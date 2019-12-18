@@ -21,6 +21,7 @@ contract("BVT - Mint and Vote test", async accounts => {
 
     it("BVT - mintBatch", async () => {
         let instance = await BVTToken.new("0xff", 3, { from: BrickMark });
+        assert.equal((await instance.decimals()).toString(), "0");
         let recipients = [alice, bob, carol];
         let amounts = [
             "1000000000000000000",
