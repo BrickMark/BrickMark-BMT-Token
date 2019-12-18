@@ -1,6 +1,6 @@
 const truffleAssert = require('truffle-assertions');
 const BMTToken = artifacts.require("./BMTToken.sol");
-const time = require("./TimeUtil");
+const time = require("../test/TimeUtil");
 
 contract("UI-Setup Test", async accounts => {
 

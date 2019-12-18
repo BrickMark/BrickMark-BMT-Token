@@ -21,8 +21,10 @@ export const store = new Vuex.Store({
         exactBalance: false,
         bmtAddress: "0x7D586da8c71163e41cba108e6624b94B2de9EaaB",
         bmtInfo: {},
-        bvtAddress: null,
+        bvtAddress: "0x24556b7D1d135136Eac70771f933948115b5a681",
         bvtInfo: {},
+        bvtUsers: [],
+        bvtEvents: [],
         events: []
     },
     mutations: {
@@ -52,6 +54,12 @@ export const store = new Vuex.Store({
         updateBvtInfo(state, bvtInfo) {
             state.bvtInfo = bvtInfo;
         },
+        setBvtUsers(state, bvtUsers) {
+            state.bvtUsers = bvtUsers;
+        },
+        addBvtEvent(state, event) {
+            state.events.unshift(event);
+        }
     },
     actions: {
         updateAllUsers: async (context) => {
@@ -91,6 +99,29 @@ export const store = new Vuex.Store({
             var bvtAddress = store.getters.bvtAddress;
             var info = await blockchain.getBvtInfo(bvtAddress);
             context.commit('updateBvtInfo', info);
+        },
+        updateBvtUsers: async (context) => {
+            if(store.getters.bvtAddress == null){
+                return;
+            }
+
+            var users = store.getters.users;
+            var bvtUsers = [];
+            for(var i=0; i<users.length; i++){
+                bvtUsers.push({name: users[i].name, address: users[i].address});
+            }
+            var updatedUsers = [];
+            var bvtAddress = store.getters.bvtAddress;
+            for(var j=0; j<users.length; j++){
+                var newUser = await blockchain.getBvtUserInfo(bvtAddress, bvtUsers[j].address, bvtUsers[j].name);
+                updatedUsers.push(newUser);
+            }
+            context.commit('setBvtUsers', updatedUsers);
+        },
+        addBvtEvent: (context, newEvent) => {
+            context.commit('addBvtEvent', newEvent);
+            store.dispatch("updateBvtInfo");
+            store.dispatch("updateBvtUsers");  
         }
     },
     getters: {
@@ -100,7 +131,8 @@ export const store = new Vuex.Store({
         bmtInfo: state => state.bmtInfo,
         events: state => state.events,
         bvtAddress: state => state.bvtAddress,
-        bvtInfo: state => state.bvtInfo
+        bvtInfo: state => state.bvtInfo,
+        bvtUsers: state => state.bvtUsers
     }
 
 });

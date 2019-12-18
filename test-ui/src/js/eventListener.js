@@ -11,6 +11,8 @@ var events = {
         if (error) {
             console.error("Event Err: " + error);
         }
+        console.log("Event: " + result.event);
+
 
         if (result) {
             var entry = {};
@@ -54,6 +56,38 @@ var events = {
             }
 
             store.dispatch("addEvent", entry);
+            //await this.updateParent();
+        }
+    },
+
+    bvtEventListener(error, result) {
+        if (error) {
+            console.error("BVTEvent Err: " + error);
+        }
+        console.log("BVTEvent: " + result.event);
+
+
+        if (result) {
+            var entry = {};
+            entry.id = result.id;
+            entry.name = result.event;
+
+            if (result.event === "Transfer") {
+                entry.detail =
+                    "From: " +
+                    blockchain.toShortAddress(result.returnValues[0]) +
+                    ", To: " +
+                    blockchain.toShortAddress(result.returnValues[1]) +
+                    ", BVT: " +
+                    result.returnValues[2]
+            } else {
+                entry.detail = "coming soon";
+                entry.detail = result.returnValues;
+                console.dir(result);
+                console.dir(result.returnValues);
+            }
+
+            store.dispatch("addBvtEvent", entry);
             //await this.updateParent();
         }
     }

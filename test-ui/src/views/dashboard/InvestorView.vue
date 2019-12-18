@@ -5,7 +5,7 @@
         <thead>
           <tr>
             <th class="text-left">Name</th>
-            <th class="text-left">Investor</th>
+            <th class="text-left">Address</th>
             <th class="text-left">Balance</th>
             <th class="text-left">Vested</th>
             <th class="text-left">Vesting end Time</th>

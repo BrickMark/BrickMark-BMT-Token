@@ -7,8 +7,6 @@ import { store } from '../store/store'
 
 var web3 = new Web3(window.ethereum || "ws://localhost:8545");
 
-const decimals = 18;
-
 window.ethereum.enable().then(function (addresses) {
     console.log("Your Address:", addresses[0]);
 });
@@ -141,7 +139,7 @@ var blockchain = {
         return date.toISOString().substring(0, 16) + "UTC";
     },
 
-    toContractNumber(humanBalance) {
+    toContractNumber(humanBalance, decimals = 18) {
         if (humanBalance == null) {
             return "0";
         }
@@ -149,7 +147,7 @@ var blockchain = {
         return result.toString(10);
     },
 
-    toHumanNumber(balance) {
+    toHumanNumber(balance, decimals = 18) {
         if (balance == null) {
             return "0";
         }
@@ -157,6 +155,7 @@ var blockchain = {
     },
 
     async deployVoting(votingText, votingOptions) {
+        console.log('deploy voting: ' + votingText);
         var coinbase = await web3.eth.getCoinbase();
 
         var votingHash = web3.utils.sha3(votingText);
@@ -169,10 +168,10 @@ var blockchain = {
             from: coinbase, // default from address
             gasPrice: "20000000000" // default gas price in wei, 20 gwei in this case
         });
-        
+
         console.log("Voting Contract: " + votingInstance.options.address);
         return votingInstance.options.address;
-    }, 
+    },
 
     async getVotingInstance(address) {
         var coinbase = await web3.eth.getCoinbase();
@@ -195,16 +194,39 @@ var blockchain = {
         const votingOptions = await erc20Instance.methods.getVotingOptions().call();
         const votingTextHash = await erc20Instance.methods.getHashedVotingText().call();
         const state = await erc20Instance.methods.getState().call();
-        const startTime = await erc20Instance.methods.getStartTime().call();
-        const endTime = await erc20Instance.methods.getEndTime().call();
+        var hState = state;
+        if (state == 0)
+            hState = "Init";
+        else if (state == 1)
+            hState = "Voting";
+        else if (state == 2)
+            hState = "Voting Ended";
 
-        const totalSupplyHumanReadable = this.toHumanNumber(totalSupply);
-       // const votingTextHash = await erc20Instance.methods.getHashedVotingText().call();
+        var startTime = await erc20Instance.methods.getStartTime().call();
+        if (startTime == 0)
+            startTime = "Not Started";
+        else
+            startTime = this.toHumanDate(startTime);
+
+        var endTime = await erc20Instance.methods.getEndTime().call();
+        if (endTime == 0)
+            endTime = "Not Started";
+        else
+            endTime = this.toHumanDate(endTime);
+
+        const totalSupplyHumanReadable = totalSupply; //this.toHumanNumber(totalSupply, decimals);
+        // const votingTextHash = await erc20Instance.methods.getHashedVotingText().call();
         var votes = []
         console.log("start calc voting");
-        for (var i=1;i<=parseInt(votingOptions.toString());i++){
+        for (var i = 1; i <= parseInt(votingOptions.toString()); i++) {
             var vote = await erc20Instance.methods.getVotesFor(i).call();
-            votes.push(vote);
+            vote = parseInt(vote);
+            var percentage = 0;
+            if (totalSupply != 0) {
+                percentage = Math.ceil((vote / parseFloat(totalSupply)) * 100.0);
+            }
+            console.dir(percentage);
+            votes.push({ votes: vote, percentage: percentage, option: i });
         }
         console.log("end calc voting");
 
@@ -218,11 +240,50 @@ var blockchain = {
             votingTextHash: votingTextHash,
             votes: votes,
             state: state,
+            hState: hState,
             startTime: startTime,
             endTime: endTime
         };
 
         return bmtInfo;
+    },
+
+    async getBvtUserInfo(address, investorAddress, name) {
+        const erc20Instance = await blockchain.getVotingInstance(address);
+
+        const balance = await erc20Instance.methods.balanceOf(investorAddress).call();
+        var user = {
+            name: name,
+            address: investorAddress,
+            shortAddress: this.toShortAddress(investorAddress),
+            balance: balance,
+            hBalance: balance
+        };
+
+        return user;
+    },
+
+    async mintVoting(address, investors) {
+        const erc20Instance = await blockchain.getVotingInstance(address);
+
+        var investorAddrs = [];
+        var investorAmounts = [];
+        for (var i = 0; i < investors.length; i++) {
+            investorAddrs.push(investors[i].address);
+            investorAmounts.push(parseInt(investors[i].hBalance));
+        }
+
+        await erc20Instance.methods.mintBatch(investorAddrs, investorAmounts).send();
+    },
+
+    async startVoting(address, endDate) {
+        const erc20Instance = await blockchain.getVotingInstance(address);
+        await erc20Instance.methods.startVoting(endDate).send();
+    },
+
+    async getAllBvtEvents(address) {
+        const erc20Instance = await blockchain.getVotingInstance(address);
+        return erc20Instance.events;
     },
 }
 
