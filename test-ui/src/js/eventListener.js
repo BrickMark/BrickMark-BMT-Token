@@ -88,7 +88,6 @@ var events = {
             }
 
             store.dispatch("addBvtEvent", entry);
-            //await this.updateParent();
         }
     }
 }

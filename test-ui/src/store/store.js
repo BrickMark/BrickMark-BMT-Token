@@ -58,7 +58,7 @@ export const store = new Vuex.Store({
             state.bvtUsers = bvtUsers;
         },
         addBvtEvent(state, event) {
-            state.events.unshift(event);
+            state.bvtEvents.unshift(event);
         }
     },
     actions: {
@@ -119,6 +119,7 @@ export const store = new Vuex.Store({
             context.commit('setBvtUsers', updatedUsers);
         },
         addBvtEvent: (context, newEvent) => {
+            console.log("addBvtEvent2");
             context.commit('addBvtEvent', newEvent);
             store.dispatch("updateBvtInfo");
             store.dispatch("updateBvtUsers");  
@@ -132,7 +133,8 @@ export const store = new Vuex.Store({
         events: state => state.events,
         bvtAddress: state => state.bvtAddress,
         bvtInfo: state => state.bvtInfo,
-        bvtUsers: state => state.bvtUsers
+        bvtUsers: state => state.bvtUsers,
+        bvtEvents: state => state.bvtEvents
     }
 
 });
