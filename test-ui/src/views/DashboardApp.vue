@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="pa-2">BMT Dashboard</h1>
-    <v-container class="grey lighten-5" >
+    <v-container class="white">
       <v-row no-gutters >
         <v-col sm="6" >
           <v-card class="pa-2" outlined tile>

@@ -1,9 +1,21 @@
 <template>
   <v-form>
-    <v-container id="options-dropdown">
+    <v-container id="options-dropdown" class="white">
+      <v-row>
+        <v-col>
+          <h2 class="pa-2">Create new Voting</h2>
+        </v-col>
+      </v-row>
       <v-row>
         <v-col cols="12" md="5">
-          <v-textarea outlined v-model="votingText" name="input-7-4" label="Voting Text" required></v-textarea>
+          <v-textarea
+            outlined
+            v-model="votingText"
+            name="input-7-4"
+            label="Voting Text"
+            required
+            rows="6"
+          ></v-textarea>
         </v-col>
         <v-col cols="12" md="4">
           <div>Voting Options</div>
