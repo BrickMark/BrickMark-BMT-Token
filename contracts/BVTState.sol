@@ -14,7 +14,7 @@ contract BVTState is ERC20, ERC20Detailed, MinterRole {
 
     event VotingStarted(uint256 startTime, uint256 endTime);
 
-    constructor() internal ERC20Detailed("BrickMarkVotingToken", "BVT", 1) {}
+    constructor() internal ERC20Detailed("BrickMarkVotingToken", "BVT", 0) {}
 
     modifier whenInit() {
         require(getState() == State.init, "BVTState: not init state");
