@@ -4,6 +4,10 @@
       <template v-slot:default>
         <tbody>
           <tr>
+            <td>BMT Address</td>
+            <td>{{$store.getters.bmtInfo.address}}</td>
+          </tr>
+          <tr>
             <td>Name / Symbol</td>
             <td>{{$store.getters.bmtInfo.name}} / {{$store.getters.bmtInfo.symbol}}</td>
           </tr>
@@ -18,7 +22,29 @@
           </tr>
           <tr>
             <td>Paused / Frozen</td>
-            <td>{{$store.getters.bmtInfo.paused}} / {{$store.getters.bmtInfo.frozen}}</td>
+            <td>
+              <v-chip
+                class="ma-2"
+                color="green"
+                text-color="white"
+                v-if="!$store.getters.bmtInfo.paused"
+                x-small
+              >Active</v-chip>
+              <v-chip
+                class="ma-2"
+                color="warning"
+                text-color="white"
+                v-if="$store.getters.bmtInfo.paused"
+                x-small
+              >Paused</v-chip>
+              <v-chip
+                class="ma-2"
+                color="red"
+                text-color="white"
+                v-if="$store.getters.bmtInfo.frozen"
+                x-small
+              >Frozen</v-chip>
+            </td>
           </tr>
         </tbody>
       </template>
@@ -30,7 +56,7 @@
 import blockchain from "../../js/blockchainInterface";
 
 export default {
-  name: "InfoView",
+  name: "InfoView"
 };
 </script>
 <style lang="scss" scoped>

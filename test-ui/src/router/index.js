@@ -13,14 +13,14 @@ const routes = [
     component: DashboardApp
   },
   {
-    path: '/events',
-    name: 'events',
-    component: EventsApp
-  },
-  {
     path: '/voting',
     name: 'voting',
     component: VotingApp
+  },
+  {
+    path: '/events',
+    name: 'events',
+    component: EventsApp
   }
 ]
 

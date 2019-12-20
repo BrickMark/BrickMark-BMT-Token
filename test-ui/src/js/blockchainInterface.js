@@ -47,6 +47,7 @@ var blockchain = {
         const totalSupplyHumanReadable = this.toHumanNumber(totalSupply);
 
         var bmtInfo = {
+            address: this.getBMTAddress(),
             name: name,
             symbol: symbol,
             decimals: decimals,
@@ -231,6 +232,7 @@ var blockchain = {
         console.log("end calc voting");
 
         var bmtInfo = {
+            address: address,
             name: name,
             symbol: symbol,
             decimals: decimals,

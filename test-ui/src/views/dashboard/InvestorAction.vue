@@ -17,9 +17,10 @@
               <v-text-field label="BMT" v-model="bmtToMint"></v-text-field>
             </v-col>
             <v-col sm="3">
-              <v-btn small color="primary" v-on:click="mint()" block>Mint</v-btn>
+              <v-btn small color="warning" v-on:click="mint()" block>Mint</v-btn>
             </v-col>
           </v-row>
+          <v-divider></v-divider>
           <v-row>
             <v-col sm="2">
               <v-subheader>Mint Vested</v-subheader>
@@ -48,9 +49,10 @@
               </v-menu>
             </v-col>
             <v-col sm="3">
-              <v-btn small color="primary" v-on:click="mintVested()" block>Mint Vested</v-btn>
+              <v-btn small color="warning" v-on:click="mintVested()" block>Mint Vested</v-btn>
             </v-col>
           </v-row>
+          <v-divider></v-divider>
           <v-row>
             <v-col sm="2">
               <v-subheader>Pay Dividend</v-subheader>
@@ -62,21 +64,21 @@
               <v-text-field label="Message" v-model="dividendMsg"></v-text-field>
             </v-col>
             <v-col sm="3">
-              <v-btn small color="primary" v-on:click="payDividend()" block>Pay Dividend</v-btn>
+              <v-btn small color="warning" v-on:click="payDividend()" block>Pay Dividend</v-btn>
             </v-col>
           </v-row>
+          <v-divider></v-divider>
           <v-row>
             <v-col sm="9">
               <v-subheader>Hide user from table</v-subheader>
             </v-col>
             <v-col sm="3">
-              <v-btn small color="danger" v-on:click="hideUser()" block>Hide User</v-btn>
+              <v-btn small color="primary" v-on:click="hideUser()" block>Hide User</v-btn>
             </v-col>
           </v-row>
         </v-container>
         <v-divider></v-divider>
         <v-card-actions>
-          <v-spacer></v-spacer>
           <v-btn color="primary" text @click="dialog = false">Close</v-btn>
         </v-card-actions>
       </v-card>

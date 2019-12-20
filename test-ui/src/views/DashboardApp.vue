@@ -12,7 +12,7 @@
           <v-card class="pa-2" outlined tile>
             <Admin />
             <v-checkbox v-model="exactBalances" label="Show exact balances" x-small></v-checkbox>
-            <v-btn x-small v-on:click="refresh()">Refresh</v-btn>
+            
           </v-card>
         </v-col>
       </v-row>
@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import blockchain from "../js/blockchainInterface";
 import Admin from "./dashboard/Admin";
 import InfoView from "./dashboard/InfoView";
 import InvestorView from "./dashboard/InvestorView";
@@ -48,12 +47,6 @@ export default {
       set(value) {
         this.$store.dispatch("updateExactBalance", value);
       }
-    }
-  },
-  methods: {
-    async refresh() {
-      this.$store.dispatch("updateBmtInfo");
-      this.$store.dispatch("updateAllUsers");
     }
   }
 };

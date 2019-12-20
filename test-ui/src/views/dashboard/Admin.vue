@@ -1,8 +1,9 @@
 <template>
   <div>
     <div>Contract state</div>
-    <v-btn @click="pause()" color="primary" x-small>Pause</v-btn>
-    <v-btn @click="unpause()" color="primary" x-small>Unpause</v-btn>
+    <v-btn @click="pause()" color="warning" x-small :disabled="$store.getters.bmtInfo.paused">Pause</v-btn>
+    <v-btn @click="unpause()" color="warning" x-small :disabled="!$store.getters.bmtInfo.paused">Unpause</v-btn>
+    <v-btn x-small v-on:click="refresh()" color="primary">Refresh</v-btn>
   </div>
 </template>
 
@@ -20,6 +21,10 @@ export default {
     async unpause() {
       console.log("unpause");
       await blockchain.unpause();
+    },
+    async refresh() {
+      this.$store.dispatch("updateBmtInfo");
+      this.$store.dispatch("updateAllUsers");
     }
   },
   created() {}
