@@ -1,5 +1,5 @@
 <template>
-  <v-container id="options-dropdown" class="white">
+  <v-container id="options-dropdown" class="white" v-if="$store.getters.bvtAddress">
     <h2 class="pa-2">Current Voting</h2>
     <v-row>
       <v-col cols="8">
@@ -41,7 +41,21 @@
               </tr>
               <tr>
                 <td>Voting State</td>
-                <td>{{ $store.getters.bvtInfo.hState}}</td>
+                <td>
+                  <v-stepper v-model="$store.getters.bvtInfo.state"  alt-labels>
+                    <v-stepper-header>
+                      <v-stepper-step :complete="$store.getters.bvtInfo.state >= 0" step="1">Init</v-stepper-step>
+
+                      <v-divider></v-divider>
+
+                      <v-stepper-step :complete="$store.getters.bvtInfo.state > 0" step="2">Voting</v-stepper-step>
+
+                      <v-divider></v-divider>
+
+                      <v-stepper-step :complete="$store.getters.bvtInfo.state > 1" step="3">Ended</v-stepper-step>
+                    </v-stepper-header>
+                  </v-stepper>
+                </td>
               </tr>
               <tr>
                 <td>Start Time</td>
@@ -96,5 +110,9 @@
 <script>
 import blockchain from "../../js/blockchainInterface";
 export default {
-  name: "VotingInfoView"
+  name: "VotingInfoView",
+  data: () => ({
+    step: 1
+  })
 };
+</script>
