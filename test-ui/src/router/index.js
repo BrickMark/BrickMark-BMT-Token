@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import DashboardApp from '../views/DashboardApp.vue'
 import EventsApp from '../views/EventsApp.vue';
 import VotingApp from '../views/VotingApp.vue';
+import RolesMgmtApp from '../views/RolesMgmtApp.vue';
 
 Vue.use(VueRouter)
 
@@ -16,6 +17,11 @@ const routes = [
     path: '/voting',
     name: 'voting',
     component: VotingApp
+  },
+  {
+    path: '/roles',
+    name: 'rolesmgmt',
+    component: RolesMgmtApp
   },
   {
     path: '/events',

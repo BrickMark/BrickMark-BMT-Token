@@ -68,6 +68,8 @@ var blockchain = {
         const vestingEndTime = await erc20Instance.methods.vestingEndTime(investorAddress).call();
         const vestedBalance = await erc20Instance.methods.vestedAmount(investorAddress).call();
         const spendableBalance = await erc20Instance.methods.spendableAmount(investorAddress).call();
+        const isMinter = await erc20Instance.methods.isMinter(investorAddress).call();
+        const isPauser = await erc20Instance.methods.isPauser(investorAddress).call();
 
         var hVestingEndTime = "";
         if (isVested) {
@@ -86,7 +88,9 @@ var blockchain = {
             vestedBalance: vestedBalance,
             hVestedBalance: this.toHumanNumber(vestedBalance),
             spendableBalance: spendableBalance,
-            hSpendableBalance: this.toHumanNumber(spendableBalance)
+            hSpendableBalance: this.toHumanNumber(spendableBalance),
+            minter: isMinter,
+            pauser: isPauser
         };
 
         return user;
@@ -114,6 +118,16 @@ var blockchain = {
         var amount = this.toContractNumber(vestingAmount);
         console.log("Pay Dividend: " + amount);
         await erc20Instance.methods.payDividend([investor], [amount], message).send();
+    },
+
+    async addPauser(address) {
+        const erc20Instance = await blockchain.getBMTInstance();
+        await erc20Instance.methods.addPauser(address).send();
+    },
+
+    async addMinter(address) {
+        const erc20Instance = await blockchain.getBMTInstance();
+        await erc20Instance.methods.addMinter(address).send();
     },
 
     async pause() {

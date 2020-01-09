@@ -49,11 +49,6 @@ import AddUser from "./AddUser";
 
 export default {
   name: "InvestorView",
-  data() {
-    return {
-      dialog: false
-    };
-  },
   components: {
     InvestorAction,
     AddUser

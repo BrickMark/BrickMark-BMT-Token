@@ -31,6 +31,7 @@ export default {
     links: [
       {icon: "mdi-home-currency-usd", text: "Dashboard", route: "/"},
       {icon: "mdi-vote", text: "Voting", route: "/voting"},
+      {icon: "mdi-account-card-details-outline", text: "Roles", route: "/roles"},
       {icon: "mdi-flash", text: "Events", route: "/events"}
     ]
   })
