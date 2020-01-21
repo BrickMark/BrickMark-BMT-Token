@@ -1,4 +1,4 @@
-pragma solidity 0.5.12;
+pragma solidity 0.5.16;
 
 /// The GNOSIS MultiSig Wallet
 /// For testing purpose only The Gnosis MultiSig Wallet
