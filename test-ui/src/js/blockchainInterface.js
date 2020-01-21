@@ -23,8 +23,12 @@ var blockchain = {
         return web3;
     },
 
+    async getActiveAccount() {
+        return await web3.eth.getCoinbase();
+    },
+
     async getBMTInstance() {
-        var coinbase = await web3.eth.getCoinbase();
+        var coinbase = await this.getActiveAccount();
         //console.log("Coinbase:", coinbase);
         var erc20Instance = new web3.eth.Contract(bmtabi, this.getBMTAddress(), {
             from: coinbase, // default from address

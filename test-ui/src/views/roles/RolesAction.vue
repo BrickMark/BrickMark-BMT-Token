@@ -11,19 +11,31 @@
         <v-container class="grey lighten-5">
           <v-row>
             <v-col sm="9">
-              <v-subheader>Add user to the Minter role</v-subheader>
+              <v-subheader>Add {{investor.name}} to the Minter role</v-subheader>
             </v-col>
             <v-col sm="3">
-              <v-btn small color="warning" v-on:click="addMinter()" block>Add User</v-btn>
+              <v-btn
+                small
+                color="warning"
+                v-on:click="addMinter()"
+                block
+                :disabled="!isMinter"
+              >Add User</v-btn>
             </v-col>
           </v-row>
           <v-divider></v-divider>
           <v-row>
             <v-col sm="9">
-              <v-subheader>Add user to the Pauser role</v-subheader>
+              <v-subheader>Add {{investor.name}} to the Pauser role</v-subheader>
             </v-col>
             <v-col sm="3">
-              <v-btn small color="warning" v-on:click="addPauser()" block>Add User</v-btn>
+              <v-btn
+                small
+                color="warning"
+                v-on:click="addPauser()"
+                block
+                :disabled="!isMinter"
+              >Add User</v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -48,7 +60,9 @@ export default {
   },
   data() {
     return {
-      dialog: false
+      dialog: false,
+      isMinter: false,
+      isPauser: false
     };
   },
   methods: {
@@ -58,6 +72,12 @@ export default {
     async addMinter() {
       await blockchain.addMinter(this.investor.address);
     }
+  },
+  async created() {
+    var address = await blockchain.getActiveAccount();
+    var user = await blockchain.getInvestorInfo(address);
+    this.isMinter = user.minter;
+    this.isPauser = user.pauser;
   }
 };
 </script>
