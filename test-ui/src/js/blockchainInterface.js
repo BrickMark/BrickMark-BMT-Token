@@ -166,7 +166,8 @@ var blockchain = {
         if (balance == null) {
             return "0";
         }
-        return ethers.utils.formatUnits(balance, decimals);
+        var f = parseFloat(ethers.utils.formatUnits(balance, decimals));
+        return f.toString();
     },
 
     async deployVoting(votingText, votingOptions) {

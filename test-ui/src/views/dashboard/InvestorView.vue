@@ -17,7 +17,16 @@
         <tbody>
           <tr v-for="investor in $store.getters.users" v-bind:key="investor.address">
             <td>{{ investor.name }}</td>
-            <td>{{ investor.shortAddress }}</td>
+            <td>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-btn text x-small @click="copy(investor.address)">
+                    <div v-on="on">{{ investor.shortAddress }}</div>
+                  </v-btn>
+                </template>
+                <span>copy address to clipboard</span>
+              </v-tooltip>
+            </td>
 
             <td v-if="$store.getters.exactBalance == true">{{investor.balance }}</td>
             <td v-else>{{ investor.hBalance }}</td>
@@ -52,6 +61,11 @@ export default {
   components: {
     InvestorAction,
     AddUser
+  },
+  methods: {
+    copy(address) {
+      this.$clipboard(address);
+    }
   }
 };
 </script>

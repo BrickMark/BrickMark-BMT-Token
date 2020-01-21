@@ -5,7 +5,17 @@
         <tbody>
           <tr>
             <td>BMT Address</td>
-            <td>{{$store.getters.bmtInfo.address}}</td>
+            <td>
+              {{$store.getters.bmtInfo.address}}
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-btn text x-small @click="copy">
+                    <v-icon dense small v-on="on">mdi-content-copy</v-icon>
+                  </v-btn>
+                </template>
+                <span>copy address to clipboard</span>
+              </v-tooltip>
+            </td>
           </tr>
           <tr>
             <td>Name / Symbol</td>
@@ -56,7 +66,12 @@
 import blockchain from "../../js/blockchainInterface";
 
 export default {
-  name: "InfoView"
+  name: "InfoView",
+  methods: {
+    copy() {
+      this.$clipboard(this.$store.getters.bmtInfo.address);
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

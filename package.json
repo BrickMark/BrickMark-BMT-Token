@@ -16,6 +16,7 @@
     "prettier": "prettier --write **/*.sol",
     "coverage": "solidity-coverage",
     "ganache": "ganache-cli -m \"dial bulk garage popular robot horse hand click enhance clown clay despair\"",
+    "ganache3s": "ganache-cli -b 3 -m \"dial bulk garage popular robot horse hand click enhance clown clay despair\"",
     "security": "truffle run verify"
   },
   "repository": {
