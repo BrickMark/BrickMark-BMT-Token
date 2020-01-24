@@ -73,3 +73,23 @@ truffle deploy --network rinkeby
 ## Testing
 
 Using https://www.npmjs.com/package/truffle-assertions
+
+
+## Gnosis Multi-Sig (Safe)
+
+Gnosis Safe (new Gnosis)
+
+Rinkeby: https://rinkeby.gnosis-safe.io
+
+Localhost: https://github.com/gnosis/safe-react
+```bash
+npm install -g serve
+<blockquote>export REACT_APP_ENV=production
+export REACT_APP_NETWORK=mainnet
+yarn build
+serve -s build_webpack -l 9000
+</blockquote>go to <a href="http://localhost:9000" class="link">http://localhost:9000</a>
+```
+
+### Loading ABI
+It’s not yet possible to load an ABI right in the interface. But here is a tutorial on how to use the “Custom Transaction” feature in the Safe Multisig: https://docs.google.com/document/d/1z3WGxMvycNzJGKvWSVaMhoZaLcwKlDjD5rE_PvKPfYs/mobilebasic
