@@ -1,6 +1,6 @@
 {
   "name": "bmt-token",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "BrickMark BMT Token",
   "main": "truffle-config.js",
   "directories": {
@@ -40,7 +40,7 @@
     "truffle-security": "^1.6.1"
   },
   "dependencies": {
-    "openzeppelin-solidity": "^2.4.0",
+    "openzeppelin-solidity": "^2.5.0",
     "truffle-hdwallet-provider": "^1.0.17"
   }
 }
