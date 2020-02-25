@@ -8,10 +8,9 @@ Best practice: https://consensys.github.io/smart-contract-best-practices/
 
 - Writeable functions such as update roles are still active in state freeze and paused. What todo?
 
-**todos**
-- MultiSig test
+**to-dos**
+- Adjust migrations script for Rinkeby and Main-net deployment
 - Deployment to Rinkeby
-- Test Frontend
 - End2End Test Scenario with Gnosis MultiSig
 - KeyManagement BrickMark
 
